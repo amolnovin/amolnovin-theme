@@ -4,6 +4,7 @@ namespace App\Seo;
 
 use App\Content\PageData;
 use App\Content\Repo;
+use App\Optimize\Seo;
 use App\Support\Data;
 use App\Support\Html;
 use App\Support\Menus;
@@ -35,15 +36,24 @@ class Feeds
 
         switch ($file) {
             case 'sitemap.xml':
-                self::send('application/xml; charset=UTF-8', self::sitemap());
+                if (Seo::enabled() && Seo::sitemap()) {
+                    self::send('application/xml; charset=UTF-8', self::sitemap());
+                }
+
                 break;
 
             case 'llms.txt':
-                self::send('text/plain; charset=UTF-8', self::llms());
+                if (Seo::enabled() && Seo::llms()) {
+                    self::send('text/plain; charset=UTF-8', self::llms());
+                }
+
                 break;
 
             case 'manifest.webmanifest':
-                self::send('application/manifest+json; charset=UTF-8', self::manifest());
+                if (Seo::enabled() && Seo::manifest()) {
+                    self::send('application/manifest+json; charset=UTF-8', self::manifest());
+                }
+
                 break;
         }
     }
@@ -133,12 +143,19 @@ class Feeds
 
         $s = Site::all();
         $admin = wp_parse_url(admin_url('admin-ajax.php'), PHP_URL_PATH);
+        $extra = Seo::robotsExtra();
+        $extra = $extra ? "\n# extra rules — تنظیمات قالب → سئو\n" . implode("\n", $extra) . "\n" : '';
+
+        if (Seo::siteNoindex()) {
+            return "# {$s['name']} — robots.txt (حالت پیش‌نمایش: noindex)\nUser-agent: *\nDisallow: /\n" . $extra;
+        }
 
         return "# {$s['name']} — robots.txt\n"
-            . "User-agent: *\nAllow: /\nDisallow: /wp-admin/\nAllow: {$admin}\nDisallow: /*?s=\nDisallow: /*?replytocom=\n\n"
+            . "User-agent: *\nAllow: /\nDisallow: /wp-admin/\nAllow: {$admin}\nDisallow: /*?s=\nDisallow: /*?replytocom=\n"
+            . $extra . "\n"
             . "# AI / answer-engine crawlers are welcome to read the public content\n"
             . "User-agent: GPTBot\nAllow: /\nUser-agent: OAI-SearchBot\nAllow: /\nUser-agent: PerplexityBot\nAllow: /\nUser-agent: Google-Extended\nAllow: /\n\n"
-            . "Sitemap: {$s['url']}/sitemap.xml\n";
+            . (Seo::enabled() && Seo::sitemap() ? "Sitemap: {$s['url']}/sitemap.xml\n" : '');
     }
 
     // ---------------------------------------------------------------- llms.txt

@@ -22,7 +22,7 @@
     short_title: 'عنوان کوتاه', cat_label: 'برچسب دسته در جست‌وجو', kws: 'کلمات کلیدی مرتبط', og: 'کلید تصویر OG', schema_type: 'نوع Schema', ld: 'گره‌های Schema (JSON-LD)', groups: 'گروه‌های نقشه‌ی سایت',
     slug: 'نامک', short: 'توضیح کوتاه', kw: 'کلمه‌ی کلیدی', audience: 'مخاطبان', intro: 'مقدمه (پاراگراف‌ها)', structure: 'ساختار صفحات (عنوان|توضیح)', tech: 'فناوری', seo: 'سئو', related: 'مرتبط',
     projects: 'نمونه‌کارها', plugins: 'افزونه‌ها', url: 'آدرس سایت', domain: 'دامنه', full: 'تصویر تمام‌صفحه', cat: 'دسته', type: 'نوع سایت', services: 'خدمات', start: 'شروع همکاری', detail: 'دارای صفحه‌ی اختصاصی',
-    featured: 'ویژه', card: 'متن کارت', overview: 'معرفی', challenge: 'چالش', solution: 'راه‌حل', deliver: 'خروجی‌ها', outcome: 'نتیجه', licensed: 'نیازمند لایسنس', ph: 'رنگ‌های جایگزین تصویر', desc_: 'توضیح'
+    snippet: 'شناسه‌ی قطعه کد', featured: 'ویژه', card: 'متن کارت', overview: 'معرفی', challenge: 'چالش', solution: 'راه‌حل', deliver: 'خروجی‌ها', outcome: 'نتیجه', licensed: 'نیازمند لایسنس', ph: 'رنگ‌های جایگزین تصویر', desc_: 'توضیح'
   };
   var TUPLES = {
     faq: ['پرسش', 'پاسخ'], cta: ['متن', 'لینک', 'کلاس دکمه'], primary: ['متن', 'لینک'], secondary: ['متن', 'لینک'], meta: ['آیکن', 'متن'], crumbs: ['عنوان', 'مسیر (خالی = بدون لینک)'],

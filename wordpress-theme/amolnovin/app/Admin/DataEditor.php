@@ -20,7 +20,7 @@ class DataEditor
         'stats' => 'آمار', 'faq' => 'پرسش‌های متداول', 'links' => 'لینک‌کارت‌ها', 'tech' => 'فناوری‌ها', 'plans' => 'پلن‌ها و قیمت', 'cta' => 'دعوت به اقدام',
         'types' => 'انواع سایت', 'projects' => 'نمونه‌کارها', 'vs' => 'مقایسه', 'form' => 'فرم مشاوره', 'posts' => 'مقالات', 'callout' => 'اطلاعیه',
         'modules' => 'سرفصل‌ها (آکاردئون)', 'team' => 'تیم', 'license' => 'پروانه‌ی کسب', 'facts' => 'واقعیت‌ها', 'timeline' => 'خط زمان', 'calc' => 'ماشین‌حساب هزینه',
-        'contact' => 'راه‌های تماس', 'chooser' => 'پیشنهاد هوشمند', 'html' => 'HTML خام',
+        'contact' => 'راه‌های تماس', 'chooser' => 'پیشنهاد هوشمند', 'html' => 'HTML خام', 'snippet' => 'قطعه کد سفارشی (Custom HTML Snippets)',
     ];
 
     protected const PAGE_TYPES = ['page', 'website_type', 'project', 'wplm_product', 'post'];
@@ -57,6 +57,7 @@ class DataEditor
             'contact' => ['kind' => 'contact'],
             'chooser' => ['kind' => 'chooser', 'id' => 'chooser', 'nav' => ''],
             'html' => ['kind' => 'html', 'html' => ''],
+            'snippet' => ['kind' => 'snippet', 'id' => '', 'nav' => '', 'alt' => false, 'eyebrow' => '', 'title' => '', 'desc' => '', 'center' => false, 'snippet' => 0],
         ];
     }
 

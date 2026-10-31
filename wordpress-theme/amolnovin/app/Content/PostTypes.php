@@ -2,6 +2,8 @@
 
 namespace App\Content;
 
+use App\Integrations\MarketManager;
+
 /**
  * Content model of the theme.
  *
@@ -57,10 +59,14 @@ class PostTypes
             'menu_position' => 22,
         ]);
 
+        // When the market-manager plugin runs the store, the theme's own product list is only a fallback:
+        // its admin UI is hidden so editors manage products in one place (و با خاموش‌شدن افزونه برمی‌گردد).
+        $pluginStore = MarketManager::usesPlugin();
+
         register_post_type('wplm_product', [
             'labels' => $labels('افزونه', 'افزونه‌های فروشگاه', 'فروشگاه افزونه'),
             'public' => false,
-            'show_ui' => true,
+            'show_ui' => ! $pluginStore,
             'show_in_rest' => false,
             'supports' => ['title', 'excerpt', 'page-attributes', 'thumbnail'],
             'menu_icon' => 'dashicons-admin-plugins',

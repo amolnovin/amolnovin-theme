@@ -4,9 +4,26 @@
   $path = $page['path'] ?? '';
   $typesCount = count(\App\Content\Repo::types());
   $moreUsed = false;
+  $hf = \App\Support\Options::section('header_footer');
+  $announce = trim((string) ($hf['announcement'] ?? ''));
+  $announceUrl = trim((string) ($hf['announcement_url'] ?? ''));
+  $ctaLabel = trim((string) ($hf['cta_label'] ?? '')) ?: 'مشاوره‌ی رایگان';
+  $ctaUrl = trim((string) ($hf['cta_url'] ?? '')) ?: '/contact-us/';
 @endphp
 <a class="skip-link" href="#content">پرش به محتوای اصلی</a>
 <div class="progress-bar" aria-hidden="true"><span></span></div>
+@if ($announce !== '')
+<div class="announce" data-announce role="region" aria-label="اعلان سایت">
+  <div class="container announce__in">
+    <p>{!! nl2br(esc_html($announce)) !!}</p>
+    @if ($announceUrl !== '')<a class="announce__link" href="{{ amol_url($announceUrl) }}">بیشتر بدانید @icon('arrow-left', 'i--sm')</a>@endif
+    @if (! empty($hf['announcement_dismiss']))
+    <button class="announce__close" type="button" data-announce-close aria-label="بستن اعلان">@icon('x')</button>
+    @endif
+  </div>
+</div>
+@endif
+@if (! empty($hf['topbar']))
 <div class="topbar">
   <div class="container topbar__in">
     <div class="topbar__group">
@@ -19,6 +36,7 @@
     </div>
   </div>
 </div>
+@endif
 <header class="site-header" id="top">
   <div class="container header__in">
     <a class="brand" href="{{ home_url('/') }}" aria-label="{{ $site['name'] }} — صفحه‌ی اصلی">
@@ -88,7 +106,7 @@
     <div class="header__actions">
       <button class="icon-btn" type="button" data-search-open aria-label="جست‌وجو در سایت (Ctrl+K)" title="جست‌وجو">@icon('search')</button>
       <button class="icon-btn theme-toggle" type="button" data-theme-toggle aria-label="تغییر حالت روشن و تاریک" title="حالت تیره / روشن">@icon('moon', 'i-moon')@icon('sun', 'i-sun')</button>
-      <a class="btn btn--cta btn--sm" href="{{ amol_url('/contact-us/') }}">@icon('message-circle') مشاوره‌ی رایگان</a>
+      <a class="btn btn--cta btn--sm" href="{{ amol_url($ctaUrl) }}">@icon('message-circle') {{ $ctaLabel }}</a>
       <button class="icon-btn burger" type="button" data-menu-open aria-label="باز کردن منو" aria-controls="drawer" aria-expanded="false">@icon('menu')</button>
     </div>
   </div>

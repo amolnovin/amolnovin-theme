@@ -9,6 +9,8 @@ wordpress-theme/amolnovin/public/build/
 wordpress-theme/dist/
 # QA output (screenshots, diffs)
 qa-output/
+# Plugin ZIPs downloaded for compatibility testing (third-party, not redistributed)
+google_drive/
 # OS / editor
 .DS_Store
 Thumbs.db

@@ -99,6 +99,29 @@ class Repo
         })();
     }
 
+    /**
+     * Categories of the blog archive, taken from WordPress (only categories that have published posts).
+     *
+     * @return array<int,array{slug:string,name:string,count:int}>
+     */
+    public static function postCategories(): array
+    {
+        $terms = get_categories([
+            'hide_empty' => true,
+            'orderby' => 'count',
+            'order' => 'DESC',
+            'number' => 12,
+        ]);
+
+        $out = [];
+
+        foreach ($terms as $term) {
+            $out[] = ['slug' => $term->slug, 'name' => $term->name, 'count' => (int) $term->count];
+        }
+
+        return $out;
+    }
+
     public static function postBy(): array
     {
         return self::$c['postBy'] ??= array_column(self::posts(), null, 'slug');
@@ -166,6 +189,7 @@ class Repo
                 $e['date'] = substr($p->post_date, 0, 10);
                 $cats = get_the_category($p->ID);
                 $e['cat'] = $cats ? $cats[0]->name : ($e['cat'] ?? 'عمومی');
+                $e['cat_slug'] = $cats ? $cats[0]->slug : 'uncategorized';
                 $e['body'] = $p->post_content;
                 $seoDesc = (string) get_post_meta($p->ID, '_amol_seo_desc', true);
                 $e['desc'] = $seoDesc !== '' ? $seoDesc : ($e['desc'] ?? $e['excerpt']);

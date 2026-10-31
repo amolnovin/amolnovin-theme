@@ -3,6 +3,7 @@
 namespace App\Seo;
 
 use App\Content\PageData;
+use App\Optimize\Seo;
 use App\Support\Html;
 use App\Support\Site;
 
@@ -14,7 +15,7 @@ class Head
 {
     public static function boot(): void
     {
-        if (self::pluginActive()) {
+        if (! Seo::enabled() || self::pluginActive()) {
             return;
         }
 
@@ -52,7 +53,8 @@ class Head
         $canonical = $p['canonical'];
         $og = $p['og_image'];
         $e = fn ($v) => esc_attr((string) $v);
-        $robots = ! empty($p['noindex']) ? 'noindex,follow' : 'index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1';
+        $noindex = ! empty($p['noindex']) || Seo::siteNoindex();
+        $robots = $noindex ? 'noindex,follow' : 'index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1';
         $ogTitle = $p['og_title'] ?? $p['title'];
         $post = ($p['kind'] ?? '') === 'post';
 
@@ -93,6 +95,10 @@ class Head
             $o[] = '<meta property="article:section" content="' . $e($p['cat']) . '">';
         }
 
+        $twitter = ltrim((string) \App\Support\Options::get('seo', 'twitter', ''), '@@');
+        if ($twitter !== '') {
+            $o[] = '<meta name="twitter:site" content="@' . $e($twitter) . '">';
+        }
         $o[] = '<meta name="twitter:card" content="summary_large_image">';
         $o[] = '<meta name="twitter:title" content="' . $e($ogTitle) . '">';
         $o[] = '<meta name="twitter:description" content="' . $e($p['desc']) . '">';

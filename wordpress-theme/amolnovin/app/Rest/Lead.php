@@ -2,6 +2,8 @@
 
 namespace App\Rest;
 
+use App\Integrations\Captcha;
+use App\Support\Options;
 use App\Support\Site;
 
 /**
@@ -45,26 +47,43 @@ class Lead
     {
         $in = $request->get_json_params() ?: $request->get_body_params();
         $in = is_array($in) ? $in : [];
+        $forms = Options::section('forms');
 
-        // honeypot: pretend success
-        if (! empty($in['website'])) {
-            return new \WP_REST_Response(['ok' => true]);
+        // honeypot: pretend success (bots get no signal)
+        if (! empty($forms['honeypot']) && ! empty($in['website'])) {
+            return new \WP_REST_Response(['ok' => true, 'message' => (string) ($forms['success_message'] ?? '')]);
         }
 
         $name = self::clean($in['name'] ?? '', 120);
         $phone = (string) preg_replace('/[^0-9+]/', '', (string) ($in['phone'] ?? ''));
 
         if (mb_strlen($name) < 2 || ! preg_match('/^(\+98|0)?9[0-9]{9}$/', $phone)) {
-            return new \WP_REST_Response(['ok' => false, 'error' => 'invalid'], 422);
+            return new \WP_REST_Response(['ok' => false, 'error' => 'invalid', 'message' => 'نام یا شماره‌ی موبایل معتبر نیست.'], 422);
+        }
+
+        // WP Math Captcha — verified server-side, before anything is stored or mailed
+        $captcha = Captcha::verify($in, 'amolnovin-lead');
+
+        if (is_wp_error($captcha)) {
+            return new \WP_REST_Response([
+                'ok' => false,
+                'error' => 'captcha',
+                'message' => (string) ($forms['captcha_message'] ?? $captcha->get_error_message()),
+            ], 400);
         }
 
         $ip = (string) ($_SERVER['REMOTE_ADDR'] ?? '0');
-        $key = 'amol_lead_' . md5($ip);
+        $limit = (int) ($forms['rate_limit'] ?? 30);
 
-        if (get_transient($key)) {
-            return new \WP_REST_Response(['ok' => false, 'error' => 'rate'], 429);
+        if ($limit > 0) {
+            $key = 'amol_lead_' . md5($ip);
+
+            if (get_transient($key)) {
+                return new \WP_REST_Response(['ok' => false, 'error' => 'rate', 'message' => 'درخواست پیشین شما ثبت شده است؛ لطفاً کمی بعد دوباره تلاش کنید.'], 429);
+            }
+
+            set_transient($key, 1, $limit);
         }
-        set_transient($key, 1, 30);
 
         $service = self::clean($in['service'] ?? '');
         $message = self::clean($in['message'] ?? '', 1500);
@@ -81,6 +100,11 @@ class Lead
         $sent = wp_mail($to, 'درخواست مشاوره‌ی جدید از سایت', $body, ['Content-Type: text/plain; charset=UTF-8']);
 
         // the request is safely stored even when the server cannot send mail
-        return new \WP_REST_Response(['ok' => (bool) ($id && ! is_wp_error($id)) || (bool) $sent]);
+        $ok = (bool) ($id && ! is_wp_error($id)) || (bool) $sent;
+
+        return new \WP_REST_Response([
+            'ok' => $ok,
+            'message' => $ok ? (string) ($forms['success_message'] ?? '') : (string) ($forms['error_message'] ?? ''),
+        ]);
     }
 }
