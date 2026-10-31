@@ -40,7 +40,7 @@ wordpress-theme/
       "version": "1.1.0",
       "date": "2026-10-31",
       "channel": "stable",
-      "requires": { "php": "8.3", "wp": "6.6", "from": ["1.0.0"] },
+      "requires": { "php": "8.4", "wp": "6.6", "from": ["1.0.0"] },
       "package": "patches/amolnovin-1.0.0-to-1.1.0.zip",
       "sha256": "…۶۴ کاراکتر هگز…",
       "notes": "پنل تنظیمات، هماهنگی افزونه‌ها، بروزرسانی با پچ",
