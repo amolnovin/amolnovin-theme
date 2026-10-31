@@ -1,0 +1,69 @@
+/* ==========================================================================
+   06 · WordPress additions (new selectors only — the design system above is untouched)
+   ========================================================================== */
+
+/* ---------------------------------------------------------------------------
+   Responsive fix (the one deliberate difference from the static HTML template).
+   Between 1021px and ~1203px the full desktop header (logo + 7 menu items + actions) is wider than the
+   viewport: the CTA is clipped and the page scrolls horizontally (iPad landscape, small laptops).
+   In that range the burger header of the mobile layout is used instead — same rules as the
+   `@media (max-width: 1020px)` block of 03-chrome.css.
+   Switch: Customize → آمل نوین → چیدمان (adds body.amol-tablet-menu). Delete this block to restore the original behaviour.
+   --------------------------------------------------------------------------- */
+@media (min-width: 1021px) and (max-width: 1235px) {
+  .amol-tablet-menu .nav, .amol-tablet-menu .header__actions .btn--cta, .amol-tablet-menu .header__actions .btn--wa { display: none; }
+  .amol-tablet-menu .burger { display: inline-grid; }
+  .amol-tablet-menu .header__in { gap: .6rem; }
+  .amol-tablet-menu .header__actions { margin-inline-start: auto; }
+  .amol-tablet-menu, html:has(body.amol-tablet-menu) { --header-h: 64px; }
+}
+
+/* accessibility helper required by WordPress themes */
+.screen-reader-text { border: 0; clip: rect(1px, 1px, 1px, 1px); clip-path: inset(50%); height: 1px; margin: -1px; overflow: hidden; padding: 0; position: absolute !important; width: 1px; word-wrap: normal !important; }
+.screen-reader-text:focus { background: var(--surface); border-radius: 8px; box-shadow: var(--shadow-md); clip: auto !important; clip-path: none; color: var(--text); display: block; font-size: .95rem; font-weight: 700; height: auto; inset-inline-start: 8px; padding: .8rem 1.2rem; top: 8px; width: auto; z-index: 100000; }
+
+/* logged-in admin bar: keep the sticky header below it */
+.admin-bar .site-header { top: 32px; }
+@media (max-width: 782px) { .admin-bar .site-header { top: 46px; } }
+@media (max-width: 600px) { .admin-bar .site-header { top: 0; } }
+
+/* core alignment / caption classes for editor content inside .prose */
+.alignleft { float: left; margin: .3em 0 1em 1.5em; }
+.alignright { float: right; margin: .3em 1.5em 1em 0; }
+.aligncenter { display: block; margin-inline: auto; }
+.wp-caption { max-width: 100%; }
+.wp-caption-text, .wp-element-caption { font-size: .88rem; color: var(--text-3); margin-top: .5rem; text-align: center; }
+.prose img { max-width: 100%; height: auto; }
+.prose .alignwide { max-width: none; }
+.sticky .post-card__body h3::after { content: ""; }
+.bypostauthor { display: block; }
+.gallery { display: grid; gap: .8rem; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); }
+.gallery-item { margin: 0; }
+.gallery-caption { font-size: .85rem; color: var(--text-3); }
+
+/* pagination (archives / blog index when there are more posts than one page) */
+.pagination { margin-top: 2.4rem; }
+.pagination .nav-links { display: flex; flex-wrap: wrap; gap: .5rem; justify-content: center; }
+.pagination .page-numbers { min-width: 42px; height: 42px; padding-inline: .8rem; display: inline-grid; place-items: center; border-radius: 12px; border: 1px solid var(--line); background: var(--surface); color: var(--text); font-weight: 700; }
+.pagination .page-numbers:hover { border-color: var(--teal-500); color: var(--accent); text-decoration: none; }
+.pagination .page-numbers.current { background: var(--navy-700); border-color: var(--navy-700); color: #fff; }
+
+/* comments (shown only when a post has comments or comments are open) */
+.comments { margin-top: 3rem; }
+.comments h2 { font-size: 1.4rem; margin-bottom: 1rem; }
+.comment-list { list-style: none; padding: 0; display: grid; gap: 1rem; }
+.comment-list .children { list-style: none; padding-inline-start: 1.6rem; display: grid; gap: 1rem; margin-top: 1rem; }
+.comment-body { border: 1px solid var(--line); border-radius: var(--r-md); padding: 1.1rem 1.3rem; background: var(--surface); }
+.comment-meta { font-size: .88rem; color: var(--text-3); margin-bottom: .6rem; }
+.comment-author .fn { font-weight: 800; color: var(--text); }
+.comment-author .avatar { border-radius: 50%; float: inline-start; margin-inline-end: .8rem; }
+.comment-form label { display: block; font-weight: 700; margin-bottom: .3rem; }
+.comment-form p { margin-bottom: 1rem; }
+.comment-form input[type="text"], .comment-form input[type="email"], .comment-form input[type="url"], .comment-form textarea { width: 100%; padding: .75rem 1rem; border-radius: var(--r-sm); border: 1px solid var(--line-2); background: var(--surface); color: var(--text); font: inherit; }
+.comment-form .submit { display: inline-flex; align-items: center; justify-content: center; gap: .5rem; padding: .8rem 1.6rem; border-radius: 14px; border: 0; background: var(--navy-700); color: #fff; font-weight: 800; cursor: pointer; }
+
+/* search results page + generic entry cards */
+.search-form { display: flex; gap: .6rem; max-width: 560px; }
+.search-form .search-field { flex: 1; padding: .8rem 1rem; border-radius: var(--r-sm); border: 1px solid var(--line-2); background: var(--surface); color: var(--text); font: inherit; }
+.search-form .search-submit { padding: .8rem 1.4rem; border-radius: var(--r-sm); border: 0; background: var(--navy-700); color: #fff; font-weight: 800; cursor: pointer; }
+.entry-content > * + * { margin-top: 1.1em; }

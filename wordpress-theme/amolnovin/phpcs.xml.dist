@@ -1,0 +1,64 @@
+<?xml version="1.0"?>
+<ruleset name="Amol Novin (Sage)">
+  <description>WordPress Coding Standards adapted to a Sage / Acorn theme (PSR-4 classes, Blade views).</description>
+
+  <file>app</file>
+  <file>functions.php</file>
+  <file>index.php</file>
+  <arg name="extensions" value="php"/>
+  <arg name="colors"/>
+  <arg value="ps"/>
+  <exclude-pattern>*/vendor/*</exclude-pattern>
+  <exclude-pattern>*/node_modules/*</exclude-pattern>
+  <exclude-pattern>*/public/*</exclude-pattern>
+
+  <config name="minimum_supported_wp_version" value="6.6"/>
+  <config name="testVersion" value="8.3-"/>
+
+  <rule ref="WordPress-Extra">
+    <!-- PSR-4 class files (App\Admin\Importer in Importer.php) instead of class-*.php -->
+    <exclude name="WordPress.Files.FileName"/>
+    <!-- readability: no Yoda conditions, short arrays are fine -->
+    <exclude name="WordPress.PHP.YodaConditions"/>
+    <exclude name="Universal.Operators.DisallowShortTernary"/>
+    <exclude name="Universal.Arrays.DisallowShortArraySyntax"/>
+    <exclude name="Generic.Arrays.DisallowShortArraySyntax"/>
+    <!-- modern PHP 8 syntax used on purpose (match, arrow functions, typed properties) -->
+    <exclude name="PEAR.Functions.FunctionCallSignature"/>
+    <exclude name="Generic.Formatting.MultipleStatementAlignment"/>
+    <exclude name="WordPress.Arrays.MultipleStatementAlignment"/>
+    <exclude name="WordPress.WhiteSpace.OperatorSpacing"/>
+    <exclude name="Squiz.Commenting.FileComment"/>
+    <exclude name="Squiz.PHP.CommentedOutCode"/>
+    <exclude name="Universal.Files.SeparateFunctionsFromOO"/>
+    <exclude name="Universal.NamingConventions.NoReservedKeywordParameterNames"/>
+    <exclude name="WordPress.NamingConventions.ValidVariableName"/>
+    <!-- PSR-12 (Sage / Laravel Pint) formatting instead of tabs; camelCase methods; slash-separated hook names -->
+    <exclude name="Generic.WhiteSpace.DisallowSpaceIndent"/>
+    <exclude name="NormalizedArrays.Arrays"/>
+    <exclude name="WordPress.Arrays"/>
+    <exclude name="WordPress.WhiteSpace"/>
+    <exclude name="Generic.Functions.OpeningFunctionBraceKernighanRitchie"/>
+    <exclude name="Squiz.Functions.FunctionDeclarationArgumentSpacing"/>
+    <exclude name="Generic.WhiteSpace.ArbitraryParenthesesSpacing"/>
+    <exclude name="Generic.Classes.OpeningBraceSameLine"/>
+    <exclude name="Squiz.ControlStructures.ControlSignature"/>
+    <exclude name="Squiz.Strings.ConcatenationSpacing"/>
+    <exclude name="Squiz.Operators.IncrementDecrementUsage"/>
+    <exclude name="Universal.Operators"/>
+    <exclude name="WordPress.NamingConventions.ValidFunctionName"/>
+    <exclude name="WordPress.NamingConventions.ValidHookName"/>
+    <exclude name="Generic.CodeAnalysis.AssignmentInCondition"/>
+    <exclude name="Squiz.PHP.DisallowMultipleAssignments"/>
+    <exclude name="Generic.CodeAnalysis.UnusedFunctionParameter"/>
+  </rule>
+
+  <rule ref="WordPress.NamingConventions.PrefixAllGlobals">
+    <exclude name="WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedNamespaceFound"/>
+    <exclude name="WordPress.NamingConventions.PrefixAllGlobals.ShortPrefixPassed"/>
+    <properties><property name="prefixes" type="array"><element value="amol"/><element value="App"/></property></properties>
+  </rule>
+  <rule ref="WordPress.WP.I18n">
+    <properties><property name="text_domain" type="array"><element value="amolnovin"/></property></properties>
+  </rule>
+</ruleset>

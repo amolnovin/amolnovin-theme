@@ -1,0 +1,107 @@
+/* ==========================================================================
+   Block editor (Gutenberg) styles — the canvas looks like the front-end typography.
+   Tokens and .prose rules are copied from the theme's design system.
+   ========================================================================== */
+@font-face { font-family: "Vazirmatn"; src: url("@fonts/Vazirmatn-subset.woff2") format("woff2"); font-weight: 100 900; font-style: normal; font-display: swap; }
+
+.editor-styles-wrapper {
+  /* brand — taken from the AVN logo */
+  --navy-950: #080a26;
+  --navy-900: #0e1038;
+  --navy-800: #161a52;
+  --navy-700: #272869;
+  --navy-600: #363a8f;
+  --navy-500: #4b50b4;
+  --navy-400: #7a7fd4;
+  --navy-300: #a8abe6;
+  --navy-200: #cfd1f3;
+  --navy-100: #e8e9fb;
+  --navy-50: #f4f5fd;
+  --teal-900: #06403c;
+  --teal-700: #0b7a73;
+  --teal-600: #0e958c;
+  --teal-500: #13a89e;
+  --teal-400: #2ec7bb;
+  --teal-300: #6fe0d6;
+  --teal-200: #b4f0ea;
+  --teal-100: #dcf8f5;
+  --teal-50: #f0fcfb;
+  --amber-600: #f39a00;
+  --amber-500: #ffb21f;
+  --amber-400: #ffc247;
+  --green-500: #18b26b;
+  --red-500: #e5484d;
+  --blue-500: #2f7cf6;
+  --violet-500: #7c5cff;
+
+  --font: "Vazirmatn", system-ui, -apple-system, "Segoe UI", Tahoma, Arial, sans-serif;
+  --font-mono: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+
+  --r-xs: 8px;
+  --r-sm: 12px;
+  --r-md: 16px;
+  --r-lg: 22px;
+  --r-xl: 32px;
+  --container: 1200px;
+  --gutter: clamp(1rem, 3vw, 2rem);
+  --header-h: 72px;
+  --ease: cubic-bezier(.22, .8, .3, 1);
+  --shadow-sm: 0 1px 2px rgba(18, 20, 58, .06), 0 2px 8px rgba(18, 20, 58, .04);
+  --shadow-md: 0 2px 4px rgba(18, 20, 58, .05), 0 10px 30px rgba(18, 20, 58, .08);
+  --shadow-lg: 0 4px 8px rgba(18, 20, 58, .06), 0 24px 60px rgba(18, 20, 58, .14);
+  --shadow-glow: 0 10px 40px rgba(19, 168, 158, .28);
+  color-scheme: light;
+  --bg: #ffffff;
+  --bg-alt: #f5f7fc;
+  --bg-tint: #eef9f8;
+  --surface: #ffffff;
+  --surface-2: #f8f9fe;
+  --text: #12143a;
+  --text-2: #444a73;
+  --text-3: #6a6f98;
+  --line: #e3e6f3;
+  --line-2: #d1d6ea;
+  --primary: var(--navy-700);
+  --primary-ink: #ffffff;
+  --accent: var(--teal-700);
+  --accent-soft: var(--teal-100);
+  --link: #2a2fa8;
+  --chip-bg: var(--navy-50);
+  --header-bg: rgba(255, 255, 255, .82);
+  --logo-n: #272869;
+  --code-bg: #0f1136;
+  --mark-bg: linear-gradient(transparent 62%, rgba(255, 178, 31, .45) 62%);
+  direction: rtl;
+  font-family: var(--font);
+  color: var(--text);
+  background: var(--bg);
+  line-height: 2;
+  font-size: 1.08rem;
+}
+.editor-styles-wrapper .editor-post-title__input { font-family: var(--font); font-weight: 900; line-height: 1.35; color: var(--text); }
+.editor-styles-wrapper h1, .editor-styles-wrapper h2, .editor-styles-wrapper h3, .editor-styles-wrapper h4 { font-family: var(--font); font-weight: 800; line-height: 1.4; color: var(--text); letter-spacing: 0; }
+.editor-styles-wrapper h2 { font-size: clamp(1.45rem, 1.1rem + 1.2vw, 2rem); }
+.editor-styles-wrapper h3 { font-size: 1.3rem; }
+.editor-styles-wrapper a { color: var(--link); }
+.editor-styles-wrapper .wp-block { max-width: 860px; }
+.editor-styles-wrapper .wp-block[data-align="wide"] { max-width: 1200px; }
+.editor-styles-wrapper { font-size: 1.08rem; line-height: 2.05; color: var(--text); }
+.editor-styles-wrapper > * + * { margin-top: 1.1em; }
+.editor-styles-wrapper h2 { margin-top: 2.2em; padding-top: .2em; font-size: clamp(1.45rem, 1.1rem + 1.2vw, 2rem); scroll-margin-top: 100px; }
+.editor-styles-wrapper h3 { margin-top: 1.8em; scroll-margin-top: 100px; }
+.editor-styles-wrapper p { margin-bottom: 0; color: var(--text); }
+.editor-styles-wrapper ul, .editor-styles-wrapper ol { padding-inline-start: 1.4rem; display: grid; gap: .5rem; }
+.editor-styles-wrapper ul { list-style: none; }
+.editor-styles-wrapper ul li { position: relative; padding-inline-start: .3rem; }
+.editor-styles-wrapper ul li::before { content: ""; position: absolute; inset-inline-start: -1.1rem; top: .95em; width: 7px; height: 7px; border-radius: 50%; background: var(--teal-500); }
+.editor-styles-wrapper ol { list-style: decimal; }
+.editor-styles-wrapper ol li::marker { color: var(--accent); font-weight: 800; }
+.editor-styles-wrapper a { text-decoration: underline; text-decoration-color: color-mix(in srgb, var(--link) 40%, transparent); font-weight: 600; }
+.editor-styles-wrapper a:hover { text-decoration-color: currentColor; }
+.editor-styles-wrapper blockquote { margin-inline: 0; padding: 1.1rem 1.4rem; border-inline-start: 4px solid var(--teal-500); background: var(--accent-soft); border-radius: var(--r-md); color: var(--text); font-weight: 600; }
+.editor-styles-wrapper blockquote p:last-child { margin: 0; }
+.editor-styles-wrapper img, .editor-styles-wrapper figure { border-radius: var(--r-md); }
+.editor-styles-wrapper figure { margin-inline: 0; }
+.editor-styles-wrapper figcaption { font-size: .88rem; color: var(--text-3); margin-top: .5rem; text-align: center; }
+.editor-styles-wrapper code { font-family: var(--font-mono); font-size: .88em; background: var(--chip-bg); padding: .1em .4em; border-radius: 6px; direction: ltr; unicode-bidi: isolate; }
+.editor-styles-wrapper .table-wrap { margin-block: 1.4em; }

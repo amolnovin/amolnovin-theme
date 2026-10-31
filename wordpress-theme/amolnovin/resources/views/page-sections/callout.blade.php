@@ -1,0 +1,1 @@
+<section class="section section--tight"><div class="container container--narrow"><div class="callout{{ ! empty($sec['warn']) ? ' callout--warn' : '' }} reveal">@icon(amol_or($sec, 'icon', 'info'))<p>{!! amol_rl($sec['text'] ?? '') !!}</p></div></div></section>

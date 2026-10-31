@@ -1,0 +1,225 @@
+{
+ "cats": [
+  [
+   "all",
+   "همه"
+  ],
+  [
+   "woo",
+   "ووکامرس و فروشگاه"
+  ],
+  [
+   "security",
+   "امنیت و سرعت"
+  ],
+  [
+   "notify",
+   "پیامک و اعلان"
+  ],
+  [
+   "manage",
+   "مدیریت و تحلیل"
+  ],
+  [
+   "special",
+   "کسب‌وکارهای تخصصی"
+  ]
+ ],
+ "store_url": "https://amolnovin.ir/wplm-store/?product=",
+ "list": [
+  {
+   "slug": "novin-security-suite",
+   "order": 0,
+   "entity": {
+    "slug": "novin-security-suite",
+    "name": "نوین سکیوریتی سوئیت",
+    "cat": "security",
+    "licensed": true,
+    "img": "security-suite",
+    "icon": "shield-check",
+    "desc": "مجموعه‌ی امنیتی وردپرس: فایروال، ورود امن، پایش تغییرات و گزارش رخدادها برای کاهش خطر هک."
+   }
+  },
+  {
+   "slug": "an-webp-converter",
+   "order": 1,
+   "entity": {
+    "slug": "an-webp-converter",
+    "name": "مبدل تصاویر آمل نوین",
+    "cat": "security",
+    "licensed": true,
+    "img": "webp-converter",
+    "icon": "image",
+    "desc": "تبدیل خودکار تصاویر وردپرس (JPG و PNG) به WebP برای سرعت بیشتر و بهبود Core Web Vitals."
+   }
+  },
+  {
+   "slug": "woo-product-filter-pro",
+   "order": 2,
+   "entity": {
+    "slug": "woo-product-filter-pro",
+    "name": "فیلتر و نمایش پیشرفته‌ی محصولات ووکامرس",
+    "cat": "woo",
+    "licensed": true,
+    "img": "product-filter",
+    "icon": "filter",
+    "desc": "فیلتر قیمت، ویژگی و دسته‌بندی بدون بارگذاری مجدد صفحه و نمایش زیبای محصولات."
+   }
+  },
+  {
+   "slug": "woo-novin-checkout",
+   "order": 3,
+   "entity": {
+    "slug": "woo-novin-checkout",
+    "name": "سفارشی‌ساز پرداخت و حساب کاربری ووکامرس",
+    "cat": "woo",
+    "licensed": true,
+    "img": "checkout-customizer",
+    "icon": "credit-card",
+    "desc": "سفارشی‌سازی صفحه‌ی تسویه‌حساب و حساب کاربری ووکامرس با تجربه‌ی فارسی و ساده."
+   }
+  },
+  {
+   "slug": "amol-wallet",
+   "order": 4,
+   "entity": {
+    "slug": "amol-wallet",
+    "name": "کیف پول آمل",
+    "cat": "woo",
+    "licensed": true,
+    "img": "wallet",
+    "icon": "wallet",
+    "desc": "کیف پول و اعتبار کاربران برای ووکامرس: شارژ، پرداخت از کیف پول و گزارش تراکنش‌ها."
+   }
+  },
+  {
+   "slug": "amol-gold-pricing",
+   "order": 5,
+   "entity": {
+    "slug": "amol-gold-pricing",
+    "name": "قیمت زنده‌ی طلا برای ووکامرس",
+    "cat": "woo",
+    "licensed": true,
+    "img": "gold-pricing",
+    "icon": "coins",
+    "desc": "قیمت‌گذاری خودکار محصولات طلا و جواهر بر اساس نرخ روز."
+   }
+  },
+  {
+   "slug": "investment-request-woo",
+   "order": 6,
+   "entity": {
+    "slug": "investment-request-woo",
+    "name": "درخواست سرمایه‌گذاری برای ووکامرس",
+    "cat": "woo",
+    "licensed": false,
+    "img": null,
+    "icon": "piggy-bank",
+    "ph": [
+     "#272869",
+     "#13a89e"
+    ],
+    "desc": "ثبت و مدیریت درخواست‌های سرمایه‌گذاری روی ووکامرس. این افزونه بدون نیاز به لایسنس ارائه می‌شود."
+   }
+  },
+  {
+   "slug": "wp-bale-eitaa-notifier",
+   "order": 7,
+   "entity": {
+    "slug": "wp-bale-eitaa-notifier",
+    "name": "اعلان‌رسان بله، ایتا، تلگرام و واتساپ",
+    "cat": "notify",
+    "licensed": true,
+    "img": "bei-notifier",
+    "icon": "bell-ring",
+    "desc": "ارسال اعلان سفارش، فرم و رخدادهای سایت به پیام‌رسان‌های بله، ایتا، تلگرام و واتساپ."
+   }
+  },
+  {
+   "slug": "ippanel-core",
+   "order": 8,
+   "entity": {
+    "slug": "ippanel-core",
+    "name": "هسته‌ی پیامک آیپی‌پنل",
+    "cat": "notify",
+    "licensed": true,
+    "img": null,
+    "icon": "message-square",
+    "ph": [
+     "#4b50b4",
+     "#2ec7bb"
+    ],
+    "desc": "اتصال وردپرس و ووکامرس به پنل پیامک IPPanel برای پیامک سفارش، OTP و اطلاع‌رسانی."
+   }
+  },
+  {
+   "slug": "wp-custom-auth-initial-plugin",
+   "order": 9,
+   "entity": {
+    "slug": "wp-custom-auth-initial-plugin",
+    "name": "ورود و ثبت‌نام با کد یک‌بارمصرف",
+    "cat": "notify",
+    "licensed": true,
+    "img": "login-register-otp",
+    "icon": "fingerprint",
+    "desc": "ورود و ثبت‌نام سریع با موبایل و پیامک تأیید، همراه با سفارشی‌سازی فرم‌ها."
+   }
+  },
+  {
+   "slug": "wplm-amolnovin-license-manager",
+   "order": 10,
+   "entity": {
+    "slug": "wplm-amolnovin-license-manager",
+    "name": "مدیر لایسنس آمل نوین (WPLM)",
+    "cat": "manage",
+    "licensed": false,
+    "img": "license-manager",
+    "icon": "key-round",
+    "desc": "سامانه‌ی صدور و مدیریت لایسنس افزونه‌ها و قالب‌ها؛ بدون نیاز به لایسنس برای استفاده."
+   }
+  },
+  {
+   "slug": "novin-analytics",
+   "order": 11,
+   "entity": {
+    "slug": "novin-analytics",
+    "name": "نوین آنالیتیکس",
+    "cat": "manage",
+    "licensed": true,
+    "img": null,
+    "icon": "chart-line",
+    "ph": [
+     "#0e1038",
+     "#2f7cf6"
+    ],
+    "desc": "گزارش آمار بازدید و رفتار کاربران داخل پیشخوان وردپرس، متناسب با نیازهای کسب‌وکار ایرانی."
+   }
+  },
+  {
+   "slug": "novin-gym-pro",
+   "order": 12,
+   "entity": {
+    "slug": "novin-gym-pro",
+    "name": "نوین جیم پرو",
+    "cat": "special",
+    "licensed": true,
+    "img": "gym-pro",
+    "icon": "dumbbell",
+    "desc": "مدیریت باشگاه ورزشی: اعضا، اشتراک، حضور و غیاب با QR و گزارش‌های مالی."
+   }
+  },
+  {
+   "slug": "maneli-plant-selector",
+   "order": 13,
+   "entity": {
+    "slug": "maneli-plant-selector",
+    "name": "گیاه‌یاب هوشمند مانلی",
+    "cat": "special",
+    "licensed": false,
+    "img": "plant-selector",
+    "icon": "sprout",
+    "desc": "با چند پرسش درباره‌ی نور و فضا، گیاه مناسب را به مشتری پیشنهاد می‌دهد؛ ساخته‌شده برای فروشگاه گل و گیاه مانلی."
+   }
+  }
+ ]
+}

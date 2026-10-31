@@ -1,0 +1,34 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/theme.json",
+  "version": 3,
+  "settings": {
+    "appearanceTools": false,
+    "layout": { "contentSize": "860px", "wideSize": "1200px" },
+    "color": {
+      "custom": true,
+      "customDuotone": false,
+      "customGradient": false,
+      "defaultDuotone": false,
+      "defaultGradients": false,
+      "defaultPalette": false,
+      "palette": [
+        { "slug": "navy-700", "name": "سرمه‌ای", "color": "#272869" },
+        { "slug": "navy-900", "name": "سرمه‌ای تیره", "color": "#0e1038" },
+        { "slug": "teal-500", "name": "فیروزه‌ای", "color": "#13a89e" },
+        { "slug": "teal-600", "name": "فیروزه‌ای تیره", "color": "#0e958c" },
+        { "slug": "amber-500", "name": "کهربایی (CTA)", "color": "#ffb21f" },
+        { "slug": "text", "name": "متن", "color": "#12143a" },
+        { "slug": "bg-alt", "name": "پس‌زمینه‌ی روشن", "color": "#f5f7fc" },
+        { "slug": "white", "name": "سفید", "color": "#ffffff" }
+      ]
+    },
+    "typography": {
+      "customFontSize": true,
+      "defaultFontSizes": false,
+      "fontFamilies": [
+        { "slug": "vazirmatn", "name": "وزیرمتن", "fontFamily": "\"Vazirmatn\", system-ui, -apple-system, \"Segoe UI\", Tahoma, Arial, sans-serif" }
+      ]
+    },
+    "spacing": { "padding": true, "units": ["px", "%", "em", "rem", "vw", "vh"] }
+  }
+}

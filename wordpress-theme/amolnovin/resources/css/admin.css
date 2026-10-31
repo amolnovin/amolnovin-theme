@@ -1,0 +1,27 @@
+/* Amol Novin — structured data editor (admin) */
+.amol-ed { border: 1px solid #c3c4c7; background: #fff; border-radius: 6px; padding: 12px; margin: 8px 0 18px; }
+.amol-ed__bar { display: flex; justify-content: flex-end; margin-bottom: 8px; }
+.amol-ed__title { margin: 18px 0 4px; font-size: 14px; }
+.amol-ed__raw { width: 100%; font-family: Consolas, Menlo, monospace; font-size: 12px; }
+.amol-obj { display: grid; gap: 10px; }
+.amol-field { display: grid; gap: 3px; }
+.amol-field--check { padding-block: 2px; }
+.amol-label { font-weight: 600; font-size: 12px; color: #1d2327; }
+.amol-field input[type=text], .amol-field input[type=number], .amol-field textarea, .amol-field select { width: 100%; max-width: none; }
+.amol-field input[type=number] { width: 140px; }
+.amol-arr { display: grid; gap: 8px; }
+.amol-arr__list { display: grid; gap: 8px; }
+.amol-arr__foot { display: flex; gap: 8px; }
+.amol-kind-select { min-width: 240px; }
+.amol-row { display: grid; grid-template-columns: 1fr auto; gap: 8px; align-items: start; }
+.amol-row--list { align-items: center; }
+.amol-card { border: 1px solid #dcdcde; border-radius: 6px; background: #f6f7f7; }
+.amol-card > summary { cursor: pointer; padding: 8px 12px; font-weight: 600; }
+.amol-card > .amol-obj, .amol-card > .amol-arr, .amol-card > .amol-field { padding: 8px 12px 12px; }
+.amol-tuple { display: grid; gap: 8px; border: 1px dashed #c3c4c7; border-radius: 6px; padding: 8px; background: #fcfcfc; }
+.amol-row--tuples .amol-field { grid-template-columns: 1fr; }
+.amol-ctl { display: flex; gap: 4px; }
+.amol-del { color: #b32d2e !important; border-color: #b32d2e !important; }
+.amol-acc { background: #fff; border: 1px solid #c3c4c7; border-radius: 6px; margin: 8px 0; padding: 0 12px; }
+.amol-acc > summary { cursor: pointer; font-weight: 700; padding: 10px 0; }
+.amol-acc code { font-weight: 400; color: #646970; }
