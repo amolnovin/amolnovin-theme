@@ -1,4 +1,6 @@
 @php
+  $hf = \App\Support\Options::section('header_footer');
+  $about = trim((string) ($hf['footer_about'] ?? ''));
   $fServices = \App\Support\Menus::tree('footer_services');
   $fTypes = \App\Support\Menus::tree('footer_types');
   $fQuick = \App\Support\Menus::tree('footer_quick');
@@ -10,7 +12,7 @@
   <div class="container footer__grid">
     <div class="footer__brand">
       <a class="brand" href="{{ home_url('/') }}"><img class="footer__logo" src="{{ $logo }}" width="84" height="84" alt="لوگوی رسمی {{ $site['name'] }}" loading="lazy"><span class="brand__text"><strong>{{ $site['short'] }}</strong><small>فناوری اطلاعات</small></span></a>
-      <p>{{ $site['name'] }} از سال {{ $site['founded_j'] }} در آمل مازندران؛ طراحی سایت وردپرس و اختصاصی، پشتیبانی سایت، سئو و تولید محتوا و خدمات امنیت و سرعت، با پروانه‌ی کسب رسمی و قرارداد کتبی.</p>
+      <p>{{ $about !== '' ? $about : $site['name'] . ' از سال ' . $site['founded_j'] . ' در آمل مازندران؛ طراحی سایت وردپرس و اختصاصی، پشتیبانی سایت، سئو و تولید محتوا و خدمات امنیت و سرعت، با پروانه‌ی کسب رسمی و قرارداد کتبی.' }}</p>
       <ul class="footer__contact">
         <li>@icon('map-pin')<span>{{ $site['address'] }}</span></li>
         <li>@icon('phone-call')<a href="tel:{{ $site['phone_intl'] }}" dir="ltr">{{ $site['phone_display'] }}</a></li>
@@ -39,14 +41,14 @@
   </div>
   <div class="container footer__cities"><strong>خدمات آنلاین و حضوری در:</strong>{{ implode('، ', $cities) }} و سراسر مازندران و ایران.</div>
   <div class="container footer__bottom">
-    <span>© {{ $site['jalali_year'] }} {{ $site['name'] }} — تمامی حقوق محفوظ است.</span>
+    <span>© {{ $site['jalali_year'] }} {{ $site['name'] }} — {{ trim((string) ($hf['footer_copyright'] ?? '')) !== '' ? $hf['footer_copyright'] : 'تمامی حقوق محفوظ است.' }}</span>
     <span class="footer__legal"><a href="{{ esc_url($privacy) }}">حریم خصوصی</a><a href="{{ amol_url('/sitemap/') }}">نقشه‌ی سایت</a><a href="{{ esc_url(get_feed_link()) }}">خوراک RSS</a></span>
   </div>
 </footer>
 <div class="fab" aria-label="دسترسی سریع">
   <a class="fab__btn fab__btn--wa" href="{{ $site['whatsapp'] }}?text={{ rawurlencode('سلام، برای مشاوره‌ی طراحی سایت پیام می‌دهم.') }}" rel="noopener" target="_blank" aria-label="گفتگو در واتساپ">@icon('b-whatsapp')<span class="fab__label">گفتگو در واتساپ</span></a>
   <a class="fab__btn fab__btn--call" href="tel:{{ $site['phone_intl'] }}" aria-label="تماس تلفنی">@icon('phone-call')<span class="fab__label">تماس تلفنی</span></a>
-  <button class="fab__btn fab__btn--top" type="button" data-to-top aria-label="بازگشت به بالای صفحه">@icon('arrow-up')</button>
+  @if (! empty($hf['back_to_top']))<button class="fab__btn fab__btn--top" type="button" data-to-top aria-label="بازگشت به بالای صفحه">@icon('arrow-up')</button>@endif
 </div>
 <div class="mobile-bar">
   <a class="btn btn--ghost btn--sm" href="tel:{{ $site['phone_intl'] }}">@icon('phone-call') تماس</a>

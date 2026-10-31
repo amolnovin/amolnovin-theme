@@ -42,36 +42,18 @@ add_filter('body_class', function ($classes) {
  */
 add_filter('language_attributes', fn () => 'lang="fa" dir="rtl"');
 
-/**
- * Keep core's inline CSS out of pages that contain no real blocks (the design system styles everything).
- * Imported posts store their body as a single "Custom HTML" block — that does not need block CSS either.
+/*
+ * Core block CSS on pages without real blocks and WordPress' speculative loading are switches of
+ * تنظیمات قالب → بهینه‌سازی سرعت (App\Optimize\Speed), so they are no longer hard-coded here.
  */
-add_action('wp_enqueue_scripts', function () {
-    $needsBlockCss = false;
-
-    if (is_singular()) {
-        $post = get_post();
-
-        if ($post && has_blocks($post->post_content)) {
-            foreach (parse_blocks($post->post_content) as $block) {
-                if (! empty($block['blockName']) && ! in_array($block['blockName'], ['core/html', 'core/freeform'], true)) {
-                    $needsBlockCss = true;
-                    break;
-                }
-            }
-        }
-    }
-
-    if ($needsBlockCss) {
-        return;
-    }
-
-    foreach (['wp-block-library', 'wp-block-library-theme', 'classic-theme-styles', 'global-styles', 'wp-img-auto-sizes-contain'] as $handle) {
-        wp_dequeue_style($handle);
-    }
-}, 100);
 
 /**
- * WordPress' automatic speculative-loading script is not part of the template.
+ * Header switches (تنظیمات قالب → هدر و فوتر): sticky header.
  */
-add_filter('wp_speculation_rules_configuration', '__return_null');
+add_filter('body_class', function ($classes) {
+    if (! \App\Support\Options::on('header_footer', 'sticky_header')) {
+        $classes[] = 'no-sticky-header';
+    }
+
+    return $classes;
+});

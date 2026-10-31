@@ -15,10 +15,9 @@
 
 <section class="section section--tight">
   <div class="container"><div class="stats">
-    <div class="stat reveal"><span class="stat__num" data-count="150" data-suffix="+">۱۵۰+</span><span class="stat__label">پروژه‌ی تحویل‌شده از سال {{ $site['founded_j'] }}</span></div>
-    <div class="stat reveal"><span class="stat__num" data-count="{{ count($projects) }}">{{ count($projects) }}</span><span class="stat__label">نمونه‌ی شاخص در این صفحه</span></div>
-    <div class="stat reveal"><span class="stat__num" data-count="{{ $detailCount }}">{{ $detailCount }}</span><span class="stat__label">مطالعه‌ی موردی کامل</span></div>
-    <div class="stat reveal"><span class="stat__num" data-count="3">۳</span><span class="stat__label">حوزه‌ی خدمت: طراحی، پشتیبانی، سئو</span></div>
+    @foreach (\App\Support\Counters::items('portfolio') as $stat)
+    <div class="stat reveal"><span class="stat__num" data-count="{{ $stat['number'] }}" data-suffix="{{ $stat['suffix'] }}">{{ amol_fa($stat['value']) }}{{ $stat['suffix'] }}</span><span class="stat__label">{{ $stat['label'] }}</span></div>
+    @endforeach
   </div></div>
 </section>
 

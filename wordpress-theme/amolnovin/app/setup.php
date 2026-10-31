@@ -103,18 +103,7 @@ add_action('after_setup_theme', function () {
     add_image_size('amol-card', 900, 506, true);
 }, 20);
 
-/**
- * Lean <head>: the static template ships none of these.
+/*
+ * A lean <head> (no generator, emojis, oEmbed discovery …) is one of the switches of
+ * تنظیمات قالب → بهینه‌سازی سرعت and lives in App\Optimize\Speed.
  */
-add_action('init', function () {
-    remove_action('wp_head', 'print_emoji_detection_script', 7);
-    remove_action('admin_print_scripts', 'print_emoji_detection_script');
-    remove_action('wp_print_styles', 'print_emoji_styles');
-    remove_action('admin_print_styles', 'print_emoji_styles');
-    remove_action('wp_head', 'wp_generator');
-    remove_action('wp_head', 'rsd_link');
-    remove_action('wp_head', 'wlwmanifest_link');
-    remove_action('wp_head', 'wp_oembed_add_discovery_links');
-    remove_action('wp_head', 'rest_output_link_wp_head');
-    remove_action('wp_head', 'wp_shortlink_wp_head', 10);
-});

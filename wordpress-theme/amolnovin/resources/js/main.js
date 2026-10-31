@@ -34,6 +34,17 @@
     try { localStorage.setItem('avn-theme', next); } catch (e) {}
   });
 
+  /* ---------- announcement bar (تنظیمات قالب → هدر و فوتر) ---------- */
+  var announce = $('[data-announce]');
+  if (announce) {
+    var annKey = 'avn-announce', annText = (announce.querySelector('p') || announce).textContent.trim().slice(0, 80);
+    try { if (localStorage.getItem(annKey) === annText) announce.hidden = true; } catch (e) {}
+    on($('[data-announce-close]', announce), 'click', function () {
+      announce.hidden = true;
+      try { localStorage.setItem(annKey, annText); } catch (e) {}
+    });
+  }
+
   /* ---------- header, progress, to-top ---------- */
   var header = $('.site-header'), bar = $('.progress-bar span'), toTop = $('[data-to-top]');
   var article = $('[data-article]');
@@ -95,11 +106,12 @@
     reveals.forEach(function (el) { io.observe(el); });
   } else { reveals.forEach(function (el) { el.classList.add('is-in'); }); }
 
-  /* ---------- counters ---------- */
+  /* ---------- counters (تنظیمات قالب → شمارنده‌ها) ---------- */
   var counters = $$('[data-count]');
+  var CDUR = parseInt(root.getAttribute('data-counter-dur') || '1400', 10);
   function runCount(el) {
-    var end = parseFloat(el.getAttribute('data-count')), suf = el.getAttribute('data-suffix') || '', t0 = null, dur = 1400;
-    if (reduce || isNaN(end)) { el.textContent = fmt(end) + suf; return; }
+    var end = parseFloat(el.getAttribute('data-count')), suf = el.getAttribute('data-suffix') || '', t0 = null, dur = CDUR > 0 ? CDUR : 0;
+    if (reduce || isNaN(end) || !dur) { el.textContent = fmt(isNaN(end) ? 0 : end) + suf; return; }
     function step(t) { if (!t0) t0 = t; var p = Math.min((t - t0) / dur, 1), e = 1 - Math.pow(1 - p, 3); el.textContent = fmt(Math.round(end * e)) + suf; if (p < 1) requestAnimationFrame(step); }
     requestAnimationFrame(step);
   }
@@ -141,19 +153,23 @@
       if (!ok) { (form.querySelector('[aria-invalid="true"]') || {}).focus && form.querySelector('[aria-invalid="true"]').focus(); return; }
       if (form.elements.website && form.elements.website.value) return;
       var data = { name: name.value.trim(), phone: p, service: form.elements.service ? form.elements.service.value : '', message: form.elements.message ? form.elements.message.value.trim() : '', page: form.getAttribute('data-page') || d.title, website: '' };
+      // WP Math Captcha: the answer is verified server-side; a missing field means the plugin is off.
+      ['wpmc_answer', 'wpmc_token', 'wpmc_website'].forEach(function (n) { if (form.elements[n]) data[n] = form.elements[n].value; });
       var text = 'سلام، من ' + data.name + ' هستم.\nشماره‌ی تماس: ' + data.phone + '\nدرخواست: ' + data.service + (data.message ? '\nتوضیحات: ' + data.message : '') + '\n(از صفحه‌ی: ' + data.page + ')';
       var wa = (form.getAttribute('data-wa') || '') + '?text=' + encodeURIComponent(text);
       btn.disabled = true; var old = btn.innerHTML; btn.innerHTML = 'در حال ارسال…';
+      function done(msg) { status.className = 'form-status is-ok'; status.textContent = msg || 'درخواست شما ثبت شد؛ کارشناس ما در کمتر از ۲ ساعت با شما تماس می‌گیرد. سپاس از اعتماد شما.'; form.reset(); refreshCaptcha(); }
+      function refreshCaptcha() { var r = form.querySelector('.wpmc-refresh'); if (r) r.click(); }
+      function failed(msg) { if (msg) { status.className = 'form-status is-warn'; status.textContent = msg; refreshCaptcha(); } else { fallback(); } }
       function fallback() {
         status.className = 'form-status is-warn';
         status.innerHTML = 'اطلاعات شما آماده است. برای ثبت سریع‌تر، پیام را مستقیم در واتساپ ارسال کنید یا تماس بگیرید.<div class="btn-row"><a class="btn btn--wa btn--sm" target="_blank" rel="noopener" href="' + wa + '">ارسال در واتساپ</a><a class="btn btn--ghost btn--sm" href="tel:' + (form.getAttribute('data-phone') || '') + '">تماس تلفنی</a></div>';
       }
-      function done() { status.className = 'form-status is-ok'; status.textContent = 'درخواست شما ثبت شد؛ کارشناس ما در کمتر از ۲ ساعت با شما تماس می‌گیرد. سپاس از اعتماد شما.'; form.reset(); }
       var ep = form.getAttribute('data-endpoint');
       if (location.protocol === 'file:' || !ep) { fallback(); btn.disabled = false; btn.innerHTML = old; return; }
       fetch(ep, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data) })
-        .then(function (r) { return r.ok ? r.json() : Promise.reject(); })
-        .then(function (j) { j && j.ok ? done() : fallback(); })
+        .then(function (r) { return r.json().catch(function () { return {}; }).then(function (j) { return { ok: r.ok, j: j || {} }; }); })
+        .then(function (res) { if (res.ok && res.j.ok) { done(res.j.message); } else { failed(res.j.message); } })
         .catch(fallback)
         .then(function () { btn.disabled = false; btn.innerHTML = old; });
     });

@@ -23,6 +23,20 @@ cd wordpress-theme && ./scripts/build-zip.sh        # → dist/amolnovin-sage-th
 # پس از فعال‌سازی:  ابزارها ← ورود محتوای نمونه آمل نوین   (یا  wp amol import --reset)
 ```
 
+## تنظیمات و بروزرسانی قالب وردپرس
+
+پس از فعال‌سازی، منوی **«قالب آمل نوین»** در پیشخوان هشت تب دارد: بهینه‌سازی سرعت، سئو، هدر و فوتر،
+شمارنده‌ها، فرم‌ها و کپچا، افزونه‌ها و فروشگاه، و بروزرسانی قالب.
+
+- **وبلاگ** (`/blog-n/`) صفحه‌ی نوشته‌های وردپرس است و با افزونه‌ی *Custom HTML Snippets* هماهنگ است.
+- **فروشگاه** (`/wplm-store/`) با افزونه‌ی *WP Plugin Market Manager* کار می‌کند (`[wplm_store]`).
+- **فرم‌ها** با *WP Math Captcha* و **امنیت** با *Novin Security Suite* هماهنگ‌اند.
+- **بروزرسانی** با پچ: کاتالوگ در [`wordpress-theme/updates/`](wordpress-theme/updates)، ساخت پچ با
+  `wordpress-theme/scripts/make-patch.sh`، و انتشار zip کامل با workflow `Release theme` روی تگ `v*`.
+
+راهنماها: [`THEME-SETTINGS.md`](wordpress-theme/docs/THEME-SETTINGS.md) · [`UPDATES.md`](wordpress-theme/docs/UPDATES.md) ·
+[`CHANGELOG.md`](wordpress-theme/docs/CHANGELOG.md)
+
 ## چقدر «یکسان» است؟
 
 قالب وردپرس با ابزارهای خودکار (در `wordpress-theme/qa-tools/`) با قالب HTML مقایسه شده است:

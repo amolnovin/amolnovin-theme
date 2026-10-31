@@ -252,6 +252,13 @@ class PageData
             return (string) wp_get_attachment_image_url((int) get_post_thumbnail_id($post), 'full');
         }
 
+        // تنظیمات قالب → سئو → تصویر پیش‌فرض Open Graph
+        $custom = \App\Optimize\Seo::ogDefault();
+
+        if ($custom !== '') {
+            return $custom;
+        }
+
         return Html::asset('img/og/default.jpg');
     }
 

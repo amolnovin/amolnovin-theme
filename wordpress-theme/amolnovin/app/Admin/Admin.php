@@ -14,6 +14,7 @@ class Admin
         Customizer::boot();
 
         if (is_admin()) {
+            Settings::boot();
             DataEditor::boot();
             SeoBox::boot();
             MenuFields::boot();

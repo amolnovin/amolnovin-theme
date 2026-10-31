@@ -67,3 +67,36 @@
 .search-form .search-field { flex: 1; padding: .8rem 1rem; border-radius: var(--r-sm); border: 1px solid var(--line-2); background: var(--surface); color: var(--text); font: inherit; }
 .search-form .search-submit { padding: .8rem 1.4rem; border-radius: var(--r-sm); border: 0; background: var(--navy-700); color: #fff; font-weight: 800; cursor: pointer; }
 .entry-content > * + * { margin-top: 1.1em; }
+
+/* ==========================================================================
+   تنظیمات قالب آمل نوین (App\Admin\Settings)
+   announcement bar · sticky header switch · captcha · snippet / store embeds
+   ========================================================================== */
+
+/* announcement bar (تنظیمات → هدر و فوتر) */
+.announce { background: linear-gradient(90deg, var(--navy-800), var(--navy-600)); color: #eef0ff; font-size: .9rem; }
+.announce[hidden] { display: none; }
+.announce__in { display: flex; align-items: center; gap: .9rem; min-height: 42px; padding-block: .45rem; }
+.announce__in p { margin: 0; flex: 1; }
+.announce__link { display: inline-flex; align-items: center; gap: .35rem; font-weight: 700; color: var(--teal-300); white-space: nowrap; }
+.announce__link:hover { color: #fff; text-decoration: none; }
+.announce__close { display: inline-flex; align-items: center; justify-content: center; width: 30px; height: 30px; border: 0; border-radius: 50%; background: rgba(255, 255, 255, .12); color: #fff; cursor: pointer; }
+.announce__close:hover { background: rgba(255, 255, 255, .24); }
+@media (max-width: 640px) { .announce__in { flex-wrap: wrap; row-gap: .3rem; } .announce__in p { flex-basis: 100%; } }
+
+/* sticky header switch (تنظیمات → هدر و فوتر) */
+.no-sticky-header .site-header { position: relative; top: auto; }
+.no-sticky-header .admin-bar .site-header { top: auto; }
+
+/* WP Math Captcha inside the theme's lead form */
+.lead-form .wpmc-field, .comment-form-wpmc { margin-block: .2rem .6rem; }
+.lead-form .wpmc-captcha { padding: .85rem 1rem; border: 1px dashed var(--line-2); border-radius: var(--r-md); background: var(--surface-2, rgba(39, 40, 105, .04)); }
+.lead-form .wpmc-captcha input[type="text"], .lead-form .wpmc-captcha input[type="number"] { width: 100%; max-width: 220px; padding: .6rem .8rem; border-radius: var(--r-sm); border: 1px solid var(--line-2); background: var(--surface); color: var(--text); font: inherit; }
+.comment-form-wpmc .wpmc-captcha { margin-bottom: 1rem; }
+
+/* embeds: custom-html-snippets + market manager store */
+.snippet-embed > * + * { margin-top: 1rem; }
+.store-embed .wplm-store { font-family: inherit; color: inherit; }
+.store-embed .wplm-store a { text-decoration: none; }
+.store-embed .wplm-store-hero { margin-top: 0; }
+.wplm-field-error, .wplm-empty { color: var(--text-3); }

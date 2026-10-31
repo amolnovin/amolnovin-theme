@@ -7,6 +7,7 @@
 
 use App\Content\PageData;
 use App\Content\Repo;
+use App\Integrations\Snippets;
 use App\Support\Data;
 use App\Support\Html;
 use App\Support\Icons;
@@ -37,6 +38,22 @@ if (! function_exists('amol_common')) {
         $c = Data::common();
 
         return $key === null ? $c : ($c[$key] ?? $default);
+    }
+}
+
+if (! function_exists('amol_option')) {
+    /** One value of تنظیمات قالب: amol_option('speed', 'preload_font', true) */
+    function amol_option(string $group, string $key, mixed $default = null): mixed
+    {
+        return \App\Support\Options::get($group, $key, $default);
+    }
+}
+
+if (! function_exists('amol_snippet')) {
+    /** Render a Custom HTML Snippets snippet by ID (returns '' when the plugin is off). */
+    function amol_snippet(int|string $id, array $atts = []): string
+    {
+        return Snippets::render($id, $atts);
     }
 }
 

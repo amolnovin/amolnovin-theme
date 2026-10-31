@@ -4,6 +4,12 @@ namespace App\Providers;
 
 use App\Admin\Admin;
 use App\Content\PostTypes;
+use App\Integrations\Captcha;
+use App\Integrations\MarketManager;
+use App\Integrations\Security;
+use App\Integrations\Snippets;
+use App\Optimize\Seo;
+use App\Optimize\Speed;
 use App\Rest\Lead;
 use App\Seo\Feeds;
 use App\Seo\Head;
@@ -29,11 +35,23 @@ class ThemeServiceProvider extends SageServiceProvider
         // theme modules
         PostTypes::boot();
         Html::boot();
+
+        // performance & SEO switches (تنظیمات قالب)
+        Speed::boot();
+        Seo::boot();
+
         Head::boot();
         Feeds::boot();
         Lead::boot();
         Redirects::boot();
         Headers::boot();
+
+        // plugin integrations
+        Snippets::boot();
+        Captcha::boot();
+        Security::boot();
+        MarketManager::boot();
+
         Admin::boot();
     }
 }

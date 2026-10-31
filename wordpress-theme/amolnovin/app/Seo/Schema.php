@@ -3,6 +3,7 @@
 namespace App\Seo;
 
 use App\Content\Repo;
+use App\Optimize\Seo;
 use App\Support\Html;
 use App\Support\Persian;
 use App\Support\Site;
@@ -34,7 +35,7 @@ class Schema
         $s = Site::all();
         $social = array_values(array_filter($s['social'] ?? []));
         $node = [
-            '@type' => ['ProfessionalService', 'LocalBusiness'], '@id' => self::orgId(),
+            '@type' => array_values(array_unique([Seo::organizationType(), 'LocalBusiness'])), '@id' => self::orgId(),
             'name' => $s['name'], 'alternateName' => [$s['short'], $s['en_name']],
             'url' => self::url() . '/',
             'logo' => ['@type' => 'ImageObject', 'url' => Html::asset('img/brand/avn_new_logo-512-512.webp'), 'width' => 512, 'height' => 512],
@@ -92,7 +93,7 @@ class Schema
             'dateModified' => $page['modified'] ?? substr((string) current_time('mysql'), 0, 10),
         ];
 
-        if (($page['path'] ?? '') !== '/') {
+        if (($page['path'] ?? '') !== '/' && Seo::breadcrumbs()) {
             $node['breadcrumb'] = ['@id' => $canonical . '#breadcrumb'];
         }
 
@@ -187,7 +188,7 @@ class Schema
     {
         $nodes = [self::organization(), self::website(), self::webpage($page, $canonical, $og)];
 
-        if (($page['path'] ?? '') !== '/') {
+        if (($page['path'] ?? '') !== '/' && Seo::breadcrumbs()) {
             $nodes[] = self::breadcrumb($page, $canonical);
         }
 

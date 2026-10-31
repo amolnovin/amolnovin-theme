@@ -1,0 +1,64 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://amolnovin.ir/theme/updates/manifest.schema.json",
+  "title": "Amol Novin theme update catalogue",
+  "description": "فهرست نسخه‌های قالب آمل نوین برای بروزرسانی با پچ. هر نسخه یک بسته‌ی ZIP شامل فقط فایل‌های تغییرکرده دارد.",
+  "type": "object",
+  "required": ["schema", "theme", "releases"],
+  "properties": {
+    "schema": { "const": 1 },
+    "theme": { "type": "string", "description": "نامک قالب؛ باید با پوشه‌ی قالب یکی باشد." },
+    "name": { "type": "string" },
+    "generated": { "type": "string", "format": "date-time" },
+    "releases": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/release" }
+    }
+  },
+  "$defs": {
+    "release": {
+      "type": "object",
+      "required": ["version", "date", "package", "sha256", "files"],
+      "properties": {
+        "version": { "type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+([-.][0-9A-Za-z.]+)?$" },
+        "date": { "type": "string", "format": "date" },
+        "channel": { "enum": ["stable", "beta"], "default": "stable" },
+        "requires": {
+          "type": "object",
+          "properties": {
+            "php": { "type": "string" },
+            "wp": { "type": "string" },
+            "from": {
+              "type": "array",
+              "items": { "type": "string" },
+              "description": "نسخه‌هایی که این پچ روی آن‌ها قابل اعمال است. خالی = هر نسخه‌ی قدیمی‌تر."
+            }
+          }
+        },
+        "package": {
+          "type": "string",
+          "description": "آدرس https بسته یا مسیر نسبی به محل manifest.json، مثلاً patches/amolnovin-1.0.0-to-1.1.0.zip"
+        },
+        "sha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+        "notes": { "type": "string" },
+        "files": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "required": ["path", "sha256"],
+            "properties": {
+              "path": { "type": "string", "description": "مسیر نسبت به ریشه‌ی قالب، بدون .. و بدون / ابتدایی" },
+              "sha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" }
+            }
+          }
+        },
+        "deleted": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "فایل‌هایی که این نسخه حذف می‌کند (با پشتیبان‌گیری)."
+        }
+      }
+    }
+  }
+}

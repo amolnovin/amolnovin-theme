@@ -1,0 +1,95 @@
+name: Release theme
+
+# Creates the installable theme ZIP (vendor + compiled assets) and attaches it to a GitHub release.
+# Push a tag (or run the workflow manually) after updating the version in amolnovin/style.css:
+#
+#   git tag v1.1.0 && git push origin v1.1.0
+#
+# The release notes come from the tag/commits; the changelog lives in wordpress-theme/docs/CHANGELOG.md.
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Tag to build and publish (e.g. v1.1.0)'
+        required: true
+
+permissions:
+  contents: write
+
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Resolve tag
+        id: meta
+        run: |
+          TAG="${{ github.event.inputs.tag || github.ref_name }}"
+          echo "tag=$TAG" >> "$GITHUB_OUTPUT"
+          echo "version=${TAG#v}" >> "$GITHUB_OUTPUT"
+          echo "asset=amolnovin-${TAG#v}.zip" >> "$GITHUB_OUTPUT"
+
+      - name: PHP 8.3
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          tools: composer
+          coverage: none
+
+      - name: Node 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20.19'
+          cache: npm
+          cache-dependency-path: wordpress-theme/amolnovin/package-lock.json
+
+      - name: Install dependencies
+        working-directory: wordpress-theme/amolnovin
+        run: |
+          composer install --no-dev --optimize-autoloader --no-interaction --no-progress
+          npm ci --no-audit --no-fund
+
+      - name: Build theme ZIP
+        working-directory: wordpress-theme
+        run: |
+          bash scripts/build-zip.sh
+          cp dist/amolnovin-sage-theme.zip "dist/${{ steps.meta.outputs.asset }}"
+
+      - name: Check the version in style.css
+        run: |
+          header_version="$(sed -n 's/^Version:[[:space:]]*//p' wordpress-theme/amolnovin/style.css | head -1 | tr -d '[:space:]')"
+          if [ "$header_version" != "${{ steps.meta.outputs.version }}" ]; then
+            echo "::warning::tag is ${{ steps.meta.outputs.version }} but style.css says $header_version"
+          fi
+
+      - name: Publish release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TAG: ${{ steps.meta.outputs.tag }}
+          ASSET: ${{ steps.meta.outputs.asset }}
+        run: |
+          if gh release view "$TAG" >/dev/null 2>&1; then
+            gh release upload "$TAG" "wordpress-theme/dist/$ASSET" --clobber
+          else
+            gh release create "$TAG" \
+              --title "AmolNovin theme $TAG" \
+              --generate-notes \
+              "wordpress-theme/dist/$ASSET"
+          fi
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: theme-zip
+          path: wordpress-theme/dist/${{ steps.meta.outputs.asset }}
+          if-no-files-found: error

@@ -150,10 +150,9 @@
 </section>
 <section class="section section--dark section--tight" aria-label="آمار آمل نوین">
   <div class="container"><div class="stats">
-    <div class="stat reveal"><span class="stat__num" data-count="15" data-suffix="+">۱۵+</span><span class="stat__label">سال تجربه در طراحی وب</span></div>
-    <div class="stat reveal"><span class="stat__num" data-count="150" data-suffix="+">۱۵۰+</span><span class="stat__label">پروژه‌ی تحویل‌شده</span></div>
-    <div class="stat reveal"><span class="stat__num" data-count="24">۲۴</span><span class="stat__label">ماه پشتیبانی فنی رایگان</span></div>
-    <div class="stat reveal"><span class="stat__num" data-count="{{ count($types) }}">{{ count($types) }}</span><span class="stat__label">نوع سایت با ساختار تخصصی</span></div>
+    @foreach (\App\Support\Counters::items('home') as $stat)
+    <div class="stat reveal"><span class="stat__num" data-count="{{ $stat['number'] }}" data-suffix="{{ $stat['suffix'] }}">{{ amol_fa($stat['value']) }}{{ $stat['suffix'] }}</span><span class="stat__label">{{ $stat['label'] }}</span></div>
+    @endforeach
   </div></div>
 </section>
 

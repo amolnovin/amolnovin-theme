@@ -13,6 +13,10 @@
     <div class="field field--full"><label for="{{ $id }}-msg">توضیح کوتاه (اختیاری)</label><textarea id="{{ $id }}-msg" name="message" rows="{{ $rows }}" placeholder="نوع کسب‌وکار، هدف سایت یا هر نکته‌ای که می‌خواهید بدانیم"></textarea></div>
     @endif
     <input class="hp" type="text" name="website" tabindex="-1" autocomplete="off" aria-hidden="true">
+    {{-- WP Math Captcha (only when the plugin is active): verified server-side in App\Rest\Lead --}}
+    @if (\App\Integrations\Captcha::shouldProtect())
+    <div class="field field--full wpmc-field">{!! \App\Integrations\Captcha::field() !!}</div>
+    @endif
     <div class="form-actions"><button class="btn btn--cta {{ $variant === 'quick' ? '' : 'btn--lg btn--block' }}" type="submit">@icon('send') {{ $cta }}</button></div>
   </div>
   @if ($variant !== 'quick')<p class="form-note">@icon('lock') پاسخ در {{ $site['response_time'] }}؛ اطلاعات شما نزد ما محفوظ می‌ماند.</p>@endif
