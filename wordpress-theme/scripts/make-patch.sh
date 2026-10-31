@@ -105,7 +105,7 @@ release = {
     'version': version,
     'date': date.today().isoformat(),
     'channel': 'stable',
-    'requires': {'php': '8.3', 'wp': '6.6', 'from': [base]},
+    'requires': {'php': '8.4', 'wp': '6.6', 'from': [base]},
     'notes': notes,
     'files': files,
     'deleted': [],

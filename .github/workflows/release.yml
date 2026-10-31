@@ -39,10 +39,10 @@ jobs:
           echo "version=${TAG#v}" >> "$GITHUB_OUTPUT"
           echo "asset=amolnovin-${TAG#v}.zip" >> "$GITHUB_OUTPUT"
 
-      - name: PHP 8.3
+      - name: PHP 8.4
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '8.3'
+          php-version: '8.4'
           tools: composer
           coverage: none
 
@@ -56,6 +56,9 @@ jobs:
       # build-zip.sh installs composer/npm dependencies inside a staging copy and compiles the assets
       - name: Build theme ZIP
         working-directory: wordpress-theme
+        env:
+          # avoids GitHub API rate limits while composer downloads the locked packages
+          COMPOSER_AUTH: '{"github-oauth":{"github.com":"${{ secrets.GITHUB_TOKEN }}"}}'
         run: |
           bash scripts/build-zip.sh
           cp dist/amolnovin-sage-theme.zip "dist/${{ steps.meta.outputs.asset }}"

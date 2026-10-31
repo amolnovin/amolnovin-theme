@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Throw-away WordPress test site with the theme installed from the production zip.
-# Needs: php >= 8.3 (+ mysqli, mbstring, xml, zip, gd, intl), MariaDB/MySQL (root via sudo), WP-CLI.
+# Needs: php >= 8.4 (composer.lock pins Symfony 8) (+ mysqli, mbstring, xml, zip, gd, intl), MariaDB/MySQL (root via sudo), WP-CLI.
 #   ./setup_lab.sh [/path/for/wordpress] [port] [theme-zip]
 # Serve it:  WP_ROOT=/path/for/wordpress PHP_CLI_SERVER_WORKERS=6 php -S 0.0.0.0:PORT router.php
 # The database and admin passwords are random (printed at the end) — override with DB_PASS / ADMIN_PASS.

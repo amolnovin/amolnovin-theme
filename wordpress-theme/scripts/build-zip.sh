@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Builds the production zip of the theme (vendor + compiled assets inside) from ./amolnovin
 #   ./scripts/build-zip.sh        ->  dist/amolnovin-sage-theme.zip
-# Needs: PHP >= 8.3, Composer 2, Node >= 20.19, zip
+# Needs: PHP >= 8.4 (composer.lock pins Symfony 8), Composer 2, Node >= 20.19, zip
 set -euo pipefail
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 STAGE="$(mktemp -d)"

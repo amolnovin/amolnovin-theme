@@ -15,7 +15,7 @@
 | [`docs/CHANGELOG.md`](docs/CHANGELOG.md) | تغییرات هر نسخه |
 
 ## نیازمندی‌ها
-PHP **۸.۳+** · وردپرس ۶.۶+ (تست‌شده با ۷.۱.۳) · MySQL ۵.۷+/MariaDB ۱۰.۴+ · Composer ۲ و Node ۲۰.۱۹+ فقط برای ساخت.
+PHP **۸.۴+** · وردپرس ۶.۶+ (تست‌شده با ۷.۱.۳) · MySQL ۵.۷+/MariaDB ۱۰.۴+ · Composer ۲ و Node ۲۰.۱۹+ فقط برای ساخت.
 
 ## نصب
 

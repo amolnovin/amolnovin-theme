@@ -16,7 +16,7 @@ cd html-template/amolnovin-theme && python3 -m http.server 8080      # http://lo
 # بازسازی از سورس:  cd html-template/amolnovin-generator && pip install jinja2 && python3 build.py
 ```
 
-**قالب وردپرس** — به PHP ≥ 8.3 و وردپرس ≥ 6.6 نیاز دارد:
+**قالب وردپرس** — به PHP ≥ 8.4 و وردپرس ≥ 6.6 نیاز دارد:
 
 ```bash
 cd wordpress-theme && ./scripts/build-zip.sh        # → dist/amolnovin-sage-theme.zip  (در وردپرس: نمایش ← پوسته‌ها ← بارگذاری)
