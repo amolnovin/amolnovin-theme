@@ -1,0 +1,16 @@
+# build (required)
+jinja2>=3.1
+
+# quality tools (optional): tools/audit.py, og.py, shot.py, overview.py, qa_js.py, overflow.py
+beautifulsoup4
+lxml
+html5lib
+playwright        # then: python -m playwright install chromium
+pillow
+
+# one-time asset preparation (optional): tools/prepare_*.py
+numpy
+scipy
+potracer
+fonttools
+brotli

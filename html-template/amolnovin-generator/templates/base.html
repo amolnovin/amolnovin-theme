@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="fa" dir="rtl" class="no-js" data-root="{{ root }}">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>{{ page.title }}</title>
+<meta name="description" content="{{ page.desc }}">
+<meta name="robots" content="{{ 'noindex,follow' if page.noindex else 'index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1' }}">
+<link rel="canonical" href="{{ canonical }}">
+<link rel="alternate" hreflang="fa-IR" href="{{ canonical }}">
+<link rel="alternate" hreflang="x-default" href="{{ canonical }}">
+<meta name="author" content="{{ SITE.name }}">
+<meta name="theme-color" content="#272869" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#080a24" media="(prefers-color-scheme: dark)">
+<meta name="color-scheme" content="light dark">
+<meta name="format-detection" content="telephone=yes">
+<meta name="geo.region" content="IR-MZ">
+<meta name="geo.placename" content="{{ SITE.city }}">
+<meta name="geo.position" content="{{ SITE.geo[0] }};{{ SITE.geo[1] }}">
+<meta name="ICBM" content="{{ SITE.geo[0] }}, {{ SITE.geo[1] }}">
+<meta property="og:locale" content="{{ SITE.locale }}">
+<meta property="og:site_name" content="{{ SITE.name }}">
+<meta property="og:type" content="{{ 'article' if page.kind == 'post' else 'website' }}">
+<meta property="og:title" content="{{ page.og_title or page.title }}">
+<meta property="og:description" content="{{ page.desc }}">
+<meta property="og:url" content="{{ canonical }}">
+<meta property="og:image" content="{{ og_image }}">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="{{ page.og_alt or page.title }}">
+{% if page.kind == 'post' %}<meta property="article:published_time" content="{{ page.date }}">
+<meta property="article:modified_time" content="{{ page.date }}">
+<meta property="article:section" content="{{ page.cat }}">
+{% endif %}
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="{{ page.og_title or page.title }}">
+<meta name="twitter:description" content="{{ page.desc }}">
+<meta name="twitter:image" content="{{ og_image }}">
+<link rel="icon" href="{{ asset('img/brand/favicon.svg') }}" type="image/svg+xml">
+<link rel="icon" href="{{ asset('img/brand/favicon.ico') }}" sizes="48x48">
+<link rel="icon" href="{{ asset('img/brand/favicon-32.png') }}" sizes="32x32" type="image/png">
+<link rel="apple-touch-icon" href="{{ asset('img/brand/apple-touch-icon.png') }}">
+<link rel="manifest" href="{{ url('/manifest.webmanifest') }}">
+<link rel="alternate" type="application/rss+xml" title="وبلاگ {{ SITE.short }}" href="{{ url('/feed.xml') }}">
+<link rel="sitemap" type="application/xml" href="{{ url('/sitemap.xml') }}">
+<link rel="preload" href="{{ asset('fonts/Vazirmatn-subset.woff2') }}" as="font" type="font/woff2" crossorigin>
+<script>(function(d){var t;try{t=localStorage.getItem('avn-theme')}catch(e){}if(!t&&window.matchMedia&&matchMedia('(prefers-color-scheme: dark)').matches)t='dark';d.documentElement.setAttribute('data-theme',t||'light');d.documentElement.className=d.documentElement.className.replace('no-js','js')})(document)</script>
+<link rel="stylesheet" href="{{ asset('css/style.css') }}">
+{% block head_extra %}{% endblock %}
+<script type="application/ld+json">{{ schema_json }}</script>
+</head>
+<body class="page-{{ page.kind }}">
+<!--SPRITE-->
+{% include "partials/header.html" %}
+<main id="content" tabindex="-1">
+{% block main %}{% endblock %}
+</main>
+{% include "partials/footer.html" %}
+{% include "partials/overlays.html" %}
+<noscript><style>.js .reveal{opacity:1!important;transform:none!important}</style></noscript>
+<script src="{{ asset('js/search-index.js') }}" defer></script>
+<script src="{{ asset('js/main.js') }}" defer></script>
+</body>
+</html>

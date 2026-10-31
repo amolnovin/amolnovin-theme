@@ -1,0 +1,57 @@
+<footer class="site-footer">
+  <div class="container footer__grid">
+    <div class="footer__brand">
+      <a class="brand" href="{{ url('/') }}"><img class="footer__logo" src="{{ asset('img/brand/avn_new_logo-512-512.webp') }}" width="84" height="84" alt="لوگوی رسمی {{ SITE.name }}" loading="lazy"><span class="brand__text"><strong>{{ SITE.short }}</strong><small>فناوری اطلاعات</small></span></a>
+      <p>{{ SITE.name }} از سال {{ SITE.founded_j }} در آمل مازندران؛ طراحی سایت وردپرس و اختصاصی، پشتیبانی سایت، سئو و تولید محتوا و خدمات امنیت و سرعت، با پروانه‌ی کسب رسمی و قرارداد کتبی.</p>
+      <ul class="footer__contact">
+        <li>{{ icon('map-pin') }}<span>{{ SITE.address }}</span></li>
+        <li>{{ icon('phone-call') }}<a href="tel:{{ SITE.phone_intl }}" dir="ltr">{{ SITE.phone_display }}</a></li>
+        <li>{{ icon('mail') }}<a href="mailto:{{ SITE.email }}" dir="ltr">{{ SITE.email }}</a></li>
+      </ul>
+      <div class="social">
+        <a href="{{ SITE.whatsapp }}" rel="noopener" target="_blank" aria-label="واتساپ">{{ icon('b-whatsapp') }}</a>
+        {% for k, v in SITE.social.items() if v %}<a href="{{ v }}" rel="noopener me" target="_blank" aria-label="{{ k }}">{{ icon('b-' ~ k) }}</a>{% endfor %}
+        <a href="mailto:{{ SITE.email }}" aria-label="ایمیل">{{ icon('mail') }}</a>
+      </div>
+    </div>
+    <div>
+      <h2 class="footer__title">خدمات</h2>
+      <ul class="footer__list">{% for s in NAV_SERVICES %}<li><a href="{{ url(s[0]) }}">{{ s[1] }}</a></li>{% endfor %}</ul>
+    </div>
+    <div>
+      <h2 class="footer__title">انواع سایت</h2>
+      <ul class="footer__list">{% for t in TYPES[:10] %}<li><a href="{{ url('/services/web-design/' ~ t.slug ~ '/') }}">{{ t.title }}</a></li>{% endfor %}
+      <li><a href="{{ url('/services/web-design/') }}"><strong>+ {{ TYPES|length - 10 }} نوع دیگر</strong></a></li></ul>
+    </div>
+    <div>
+      <h2 class="footer__title">دسترسی سریع</h2>
+      <ul class="footer__list">
+        <li><a href="{{ url('/portfolio/') }}">نمونه‌کارها</a></li>
+        <li><a href="{{ url('/price-wordpress/') }}">هزینه طراحی سایت</a></li>
+        <li><a href="{{ url('/web-design-amol/') }}">طراحی سایت در آمل</a></li>
+        <li><a href="{{ url('/wordpress-learn/') }}">آموزش وردپرس</a></li>
+        <li><a href="{{ url('/wplm-store/') }}">فروشگاه افزونه‌ها</a></li>
+        <li><a href="{{ url('/blog-n/') }}">وبلاگ</a></li>
+        <li><a href="{{ url('/about-us/') }}">درباره‌ی ما</a></li>
+        <li><a href="{{ url('/resume/') }}">رزومه‌ی مجموعه</a></li>
+        <li><a href="{{ url('/contact-us/') }}">تماس با ما</a></li>
+        <li><a href="{{ url('/sitemap/') }}">نقشه‌ی سایت</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="container footer__cities"><strong>خدمات آنلاین و حضوری در:</strong>{{ CITIES|join('، ') }} و سراسر مازندران و ایران.</div>
+  <div class="container footer__bottom">
+    <span>© {{ SITE.jalali_year }} {{ SITE.name }} — تمامی حقوق محفوظ است.</span>
+    <span class="footer__legal"><a href="{{ url('/privacy-policy/') }}">حریم خصوصی</a><a href="{{ url('/sitemap/') }}">نقشه‌ی سایت</a><a href="{{ url('/feed.xml') }}">خوراک RSS</a></span>
+  </div>
+</footer>
+<div class="fab" aria-label="دسترسی سریع">
+  <a class="fab__btn fab__btn--wa" href="{{ SITE.whatsapp }}?text={{ 'سلام، برای مشاوره‌ی طراحی سایت پیام می‌دهم.'|urlencode }}" rel="noopener" target="_blank" aria-label="گفتگو در واتساپ">{{ icon('b-whatsapp') }}<span class="fab__label">گفتگو در واتساپ</span></a>
+  <a class="fab__btn fab__btn--call" href="tel:{{ SITE.phone_intl }}" aria-label="تماس تلفنی">{{ icon('phone-call') }}<span class="fab__label">تماس تلفنی</span></a>
+  <button class="fab__btn fab__btn--top" type="button" data-to-top aria-label="بازگشت به بالای صفحه">{{ icon('arrow-up') }}</button>
+</div>
+<div class="mobile-bar">
+  <a class="btn btn--ghost btn--sm" href="tel:{{ SITE.phone_intl }}">{{ icon('phone-call') }} تماس</a>
+  <a class="btn btn--wa btn--sm" href="{{ SITE.whatsapp }}" rel="noopener" target="_blank">{{ icon('b-whatsapp') }} واتساپ</a>
+  <a class="btn btn--cta btn--sm" href="{{ url('/contact-us/') }}">مشاوره‌ی رایگان</a>
+</div>

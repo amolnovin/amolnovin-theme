@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% import "macros.html" as m with context %}
+{% block main %}
+{% include "partials/page_hero.html" %}
+<section class="section"><div class="container"><div class="sitemap-cols">
+  {% for title, links in page.groups %}
+  <section><h2>{{ title }}</h2><ul class="bullets">{% for t, u in links %}<li><a href="{{ url(u) }}">{{ t }}</a></li>{% endfor %}</ul></section>
+  {% endfor %}
+</div></div></section>
+{% endblock %}

@@ -1,0 +1,401 @@
+{# ===================================================================== #}
+{# Reusable components                                                   #}
+{# ===================================================================== #}
+{% macro sec_head(eyebrow, title, desc=None, center=False, id=None, tag='h2') -%}
+<header class="sec-head{{ ' sec-head--center' if center }} reveal">
+  {% if eyebrow %}<span class="eyebrow">{{ eyebrow }}</span>{% endif %}
+  <{{ tag }}{% if id %} id="{{ id }}"{% endif %}>{{ title|safe }}</{{ tag }}>
+  {% if desc %}<p>{{ desc|rl|safe }}</p>{% endif %}
+</header>
+{%- endmacro %}
+
+{% macro breadcrumb(crumbs) -%}
+<nav class="breadcrumb" aria-label="مسیر صفحه"><ol>
+  <li><a href="{{ url('/') }}">خانه</a></li>
+  {% for label, path in crumbs %}<li{% if loop.last %} aria-current="page"{% endif %}>{% if path and not loop.last %}<a href="{{ url(path) }}">{{ label }}</a>{% else %}{{ label }}{% endif %}</li>{% endfor %}
+</ol></nav>
+{%- endmacro %}
+
+{% macro faq(items, open_first=False) -%}
+<div class="faq">
+{% for q, a in items %}
+  <details class="faq__item reveal"{% if open_first and loop.first %} open{% endif %}>
+    <summary><h3>{{ q }}</h3><span class="faq__icon">{{ icon('plus') }}</span></summary>
+    <div class="faq__body"><p>{{ a|rl|safe }}</p></div>
+  </details>
+{% endfor %}
+</div>
+{%- endmacro %}
+
+{% macro mockup(slug, alt='') -%}
+<img class="mock" src="{{ asset('img/types/' ~ slug ~ '.svg') }}" width="640" height="440" alt="{{ alt }}" {% if not alt %}aria-hidden="true"{% endif %}>
+{%- endmacro %}
+
+{% macro lead_form(id, service='', variant='full', cta='دریافت مشاوره‌ی رایگان', rows=3) -%}
+<form class="lead-form" id="{{ id }}" data-lead-form data-endpoint="{{ url('/' ~ SITE.form_endpoint) }}" data-wa="{{ SITE.whatsapp }}" data-phone="{{ SITE.phone_intl }}" data-page="{{ page.title }}" novalidate>
+  <div class="{{ 'quick__form' if variant == 'quick' else 'form-grid' }}">
+    <div class="field"><label for="{{ id }}-name">نام و نام خانوادگی</label><input id="{{ id }}-name" name="name" autocomplete="name" required placeholder="مثلاً علی رضایی"><span class="err" aria-live="polite"></span></div>
+    <div class="field"><label for="{{ id }}-phone">شماره‌ی موبایل</label><input id="{{ id }}-phone" name="phone" type="tel" inputmode="tel" dir="ltr" autocomplete="tel" required placeholder="09xxxxxxxxx"><span class="err" aria-live="polite"></span></div>
+    <div class="field{{ '' if variant == 'quick' else ' field--full' }}"><label for="{{ id }}-service">نوع درخواست</label>
+      <select id="{{ id }}-service" name="service">
+        {% set opts = SERVICE_OPTIONS %}
+        {% if service and service not in opts %}<option selected>{{ service }}</option>{% endif %}
+        {% for o in opts %}<option{{ ' selected' if o == service }}>{{ o }}</option>{% endfor %}
+      </select></div>
+    {% if variant == 'full' %}
+    <div class="field field--full"><label for="{{ id }}-msg">توضیح کوتاه (اختیاری)</label><textarea id="{{ id }}-msg" name="message" rows="{{ rows }}" placeholder="نوع کسب‌وکار، هدف سایت یا هر نکته‌ای که می‌خواهید بدانیم"></textarea></div>
+    {% endif %}
+    <input class="hp" type="text" name="website" tabindex="-1" autocomplete="off" aria-hidden="true">
+    <div class="form-actions"><button class="btn btn--cta {{ '' if variant == 'quick' else 'btn--lg btn--block' }}" type="submit">{{ icon('send') }} {{ cta }}</button></div>
+  </div>
+  {% if variant != 'quick' %}<p class="form-note">{{ icon('lock') }} پاسخ در {{ SITE.response_time }}؛ اطلاعات شما نزد ما محفوظ می‌ماند.</p>{% endif %}
+  <div class="form-status" role="status" aria-live="polite"></div>
+</form>
+{%- endmacro %}
+
+{% macro cta_band(title, text, primary=None, secondary=None) -%}
+<section class="section section--tight" aria-label="دعوت به اقدام">
+  <div class="container">
+    <div class="cta-band reveal">
+      <div>
+        <h2>{{ title|safe }}</h2>
+        <p>{{ text }}</p>
+        <div class="btn-row">
+          <a class="btn btn--cta btn--lg" href="{{ url((primary or ('', '/contact-us/'))[1]) }}">{{ icon('message-circle') }} {{ (primary or ('دریافت مشاوره‌ی رایگان',))[0] }}</a>
+          {% if secondary %}<a class="btn btn--light btn--lg" href="{{ url(secondary[1]) }}">{{ secondary[0] }}</a>{% endif %}
+        </div>
+      </div>
+      <div class="cta-band__side">
+        <a class="contact-line" href="tel:{{ SITE.phone_intl }}">{{ icon('phone-call') }}<span><small>تماس مستقیم</small><span dir="ltr">{{ SITE.phone_display }}</span></span></a>
+        <a class="contact-line" href="{{ SITE.whatsapp }}" target="_blank" rel="noopener">{{ icon('b-whatsapp') }}<span><small>پیام در واتساپ</small>پاسخ در {{ SITE.response_time }}</span></a>
+        <a class="contact-line" href="mailto:{{ SITE.email }}">{{ icon('mail') }}<span><small>ایمیل</small><span dir="ltr">{{ SITE.email }}</span></span></a>
+      </div>
+    </div>
+  </div>
+</section>
+{%- endmacro %}
+
+{% macro project_card(p) -%}
+<article class="project reveal" data-cat="{{ p.cat }}" data-services="{{ p.services|join(' ') }}" data-search="{{ p.title }} {{ p.domain or '' }} {{ p.card }}">
+  <div class="project__media">
+    <img src="{{ asset('img/portfolio/' ~ p.img ~ '.webp') }}" width="960" height="600" loading="lazy" decoding="async" alt="نمونه‌کار طراحی سایت {{ p.title }}">
+    <div class="project__badges">{% for s in p.services %}<span class="badge{{ ' badge--teal' if s == 'design' }}">{{ SERVICES[s] }}</span>{% endfor %}</div>
+    {% if p.detail %}<span class="project__open">مطالعه‌ی موردی {{ icon('arrow-left') }}</span>{% endif %}
+  </div>
+  <div class="project__body">
+    <div class="project__meta"><span>{{ CAT_LABEL[p.cat] }}</span>{% if p.domain %}<span dir="ltr">{{ p.domain }}</span>{% endif %}</div>
+    <h3>{% if p.detail %}<a href="{{ url('/projects/' ~ p.slug ~ '/') }}">{{ p.title }}</a>{% else %}{{ p.title }}{% endif %}</h3>
+    <p>{{ p.card }}</p>
+    <div class="project__foot">
+      <div class="project__tech">{% for t in p.tech[:3] %}<span>{{ t }}</span>{% endfor %}</div>
+      {% if p.url %}<a class="project__ext" href="{{ p.url }}" target="_blank" rel="noopener">بازدید سایت {{ icon('external-link', 'i--sm') }}</a>{% endif %}
+    </div>
+  </div>
+</article>
+{%- endmacro %}
+
+{% macro post_card(p) -%}
+<article class="post-card reveal">
+  <div class="post-card__media"><img src="{{ asset('img/blog/' ~ p.img ~ '.webp') }}" width="900" height="506" loading="lazy" decoding="async" alt="{{ p.title }}"></div>
+  <div class="post-card__body">
+    <span class="chip chip--accent" style="align-self:flex-start">{{ p.cat }}</span>
+    <h3><a href="{{ url('/' ~ p.slug ~ '/') }}">{{ p.title }}</a></h3>
+    <p>{{ p.excerpt }}</p>
+    <div class="post-meta"><span>{{ icon('calendar-days', 'i--sm') }} <time datetime="{{ p.date }}">{{ p.jdate }}</time></span><span>{{ icon('clock', 'i--sm') }} {{ p.read }} دقیقه مطالعه</span></div>
+  </div>
+</article>
+{%- endmacro %}
+
+{% macro product_card(pr) -%}
+<article class="product reveal" data-cat="{{ pr.cat }}" data-lic="{{ 'paid' if pr.licensed else 'free' }}" data-search="{{ pr.name }} {{ pr.desc }}">
+  <div class="product__media">
+    {% if pr.img %}<img src="{{ asset('img/store/' ~ pr.img ~ '.webp') }}" width="800" height="450" loading="lazy" decoding="async" alt="افزونه‌ی وردپرس {{ pr.name }}">
+    {% else %}<div class="product__ph" style="--c1:{{ pr.ph[0] }};--c2:{{ pr.ph[1] }}" role="img" aria-label="{{ pr.name }}">{{ icon(pr.icon, 'i--xl') }}</div>{% endif %}
+  </div>
+  <div class="product__body">
+    <div class="flex between items-center"><span class="product__cat">{{ icon(pr.icon, 'i--sm') }} {{ STORE_CAT[pr.cat] }}</span><span class="lic {{ 'lic--paid' if pr.licensed else 'lic--free' }}">{{ 'نیازمند لایسنس' if pr.licensed else 'بدون نیاز به لایسنس' }}</span></div>
+    <h3>{{ pr.name }}</h3>
+    <p>{{ pr.desc }}</p>
+    <div class="product__foot"><a class="btn btn--primary btn--sm" href="{{ STORE_URL }}{{ pr.slug }}" target="_blank" rel="noopener">{{ icon('shopping-bag') }} مشاهده و خرید</a></div>
+  </div>
+</article>
+{%- endmacro %}
+
+{% macro type_tile(t) -%}
+<a class="type-tile reveal" href="{{ url('/services/web-design/' ~ t.slug ~ '/') }}">
+  <span class="type-tile__ico" style="--c:{{ t.color }}">{{ icon(t.icon) }}</span>
+  <span><strong>{{ t.title }}</strong><small>{{ t.short }}</small></span>
+  {{ icon('arrow-left', 'i--go i--sm') }}
+</a>
+{%- endmacro %}
+
+{% macro map_card() -%}
+<div class="map-card" data-map data-src="https://www.google.com/maps?q={{ SITE.maps_query|urlencode }}&amp;output=embed&amp;hl=fa">
+  <div class="map-card__in">
+    <span class="map-pin">{{ icon('map-pin') }}</span>
+    <strong>{{ SITE.address }}</strong>
+    <p class="muted small" style="margin:0">دفتر آمل نوین، با هماهنگی قبلی</p>
+    <div class="btn-row" style="justify-content:center"><button class="btn btn--primary btn--sm" type="button" data-map-load>{{ icon('map') }} نمایش نقشه</button><a class="btn btn--ghost btn--sm" href="https://www.google.com/maps/search/?api=1&amp;query={{ SITE.maps_query|urlencode }}" target="_blank" rel="noopener">مسیریابی {{ icon('external-link', 'i--sm') }}</a></div>
+  </div>
+</div>
+{%- endmacro %}
+
+{# ===================================================================== #}
+{# Generic section renderer (data-driven pages)                          #}
+{# ===================================================================== #}
+{% macro render_section(sec, idx) -%}
+{% set k = sec.kind %}
+{% if k == 'prose' %}
+<section class="section{{ ' section--alt' if sec.alt }}"{% if sec.id %} id="{{ sec.id }}"{% endif %}><div class="container container--narrow">
+  {{ sec_head(sec.eyebrow, sec.title) }}
+  <div class="prose reveal">{{ sec.html|rl|safe }}</div>
+</div></section>
+
+{% elif k == 'split' %}
+<section class="section{{ ' section--alt' if sec.alt }}"{% if sec.id %} id="{{ sec.id }}"{% endif %}><div class="container">
+  <div class="split {{ sec.cls or 'split--wide-left' }}">
+    <div>
+      {{ sec_head(sec.eyebrow, sec.title) }}
+      <div class="prose reveal">{{ sec.html|rl|safe }}</div>
+      {% if sec.cta %}<div class="btn-row mt-3 reveal"><a class="btn btn--primary" href="{{ url(sec.cta[1]) }}">{{ sec.cta[0] }} {{ icon('arrow-left', 'i--arrow') }}</a>{% if sec.cta2 %}<a class="btn btn--ghost" href="{{ url(sec.cta2[1]) }}">{{ sec.cta2[0] }}</a>{% endif %}</div>{% endif %}
+    </div>
+    <div class="split__media reveal">
+      {% if sec.points %}<div class="card card--feature"><h3>{{ sec.points_title }}</h3><ul class="checklist">{% for p in sec.points %}<li>{{ icon('check') }}<span>{{ p }}</span></li>{% endfor %}</ul></div>{% endif %}
+      {% if sec.mock %}{{ mockup(sec.mock) }}{% endif %}
+      {% if sec.img %}<div class="img-frame"><img src="{{ asset(sec.img) }}" width="{{ sec.img_w or 960 }}" height="{{ sec.img_h or 600 }}" loading="lazy" alt="{{ sec.img_alt or '' }}"></div>{% endif %}
+    </div>
+  </div>
+</div></section>
+
+{% elif k == 'cards' %}
+<section class="section{{ ' section--alt' if sec.alt }}{{ ' section--dark' if sec.dark }}"{% if sec.id %} id="{{ sec.id }}"{% endif %}><div class="container">
+  {{ sec_head(sec.eyebrow, sec.title, sec.desc, sec.center) }}
+  <ul class="grid grid--{{ sec.cols or 3 }}">
+    {% for it in sec.items %}
+    <li class="card{{ ' card--hover' if it.href }} reveal" style="--d:{{ (loop.index0 % 6) * 0.06 }}s">
+      <span class="card__icon" style="--c:{{ it.color or '#0e958c' }}">{{ icon(it.icon) }}</span>
+      <h3>{{ it.title }}</h3>
+      <p>{{ it.text|rl|safe }}</p>
+      {% if it.href %}<a class="card__link" href="{{ url(it.href) }}">{{ it.cta or 'بیشتر بخوانید' }} {{ icon('arrow-left') }}</a>{% endif %}
+    </li>
+    {% endfor %}
+  </ul>
+</div></section>
+
+{% elif k == 'steps' %}
+<section class="section{{ ' section--alt' if sec.alt }}"{% if sec.id %} id="{{ sec.id }}"{% endif %}><div class="container">
+  {{ sec_head(sec.eyebrow, sec.title, sec.desc, sec.center) }}
+  <ol class="steps steps--{{ sec.items|length }}">
+    {% for it in sec.items %}
+    <li class="step reveal" style="--d:{{ (loop.index0 % 6) * 0.06 }}s">
+      <span class="step__num">{{ loop.index }}</span>
+      {% if it.time %}<span class="step__time">{{ it.time }}</span>{% endif %}
+      <h3>{{ it.title }}</h3><p>{{ it.text }}</p>
+    </li>
+    {% endfor %}
+  </ol>
+</div></section>
+
+{% elif k == 'checklist' %}
+<section class="section{{ ' section--alt' if sec.alt }}"{% if sec.id %} id="{{ sec.id }}"{% endif %}><div class="container">
+  {{ sec_head(sec.eyebrow, sec.title, sec.desc, sec.center) }}
+  <div class="card card--feature reveal"><ul class="checklist checklist--cols">{% for p in sec.items %}<li>{{ icon('check') }}<span>{{ p|rl|safe }}</span></li>{% endfor %}</ul></div>
+</div></section>
+
+{% elif k == 'table' %}
+<section class="section{{ ' section--alt' if sec.alt }}"{% if sec.id %} id="{{ sec.id }}"{% endif %}><div class="container">
+  {{ sec_head(sec.eyebrow, sec.title, sec.desc, sec.center) }}
+  <div class="table-wrap reveal"><table class="table">
+    <thead><tr>{% for h in sec.head %}<th scope="col" class="{{ 'is-hl' if loop.index0 == sec.hl }}">{{ h }}</th>{% endfor %}</tr></thead>
+    <tbody>{% for r in sec.rows %}<tr>{% for c in r %}{% if loop.first %}<th scope="row">{{ c|rl|safe }}</th>{% else %}<td class="{{ 'is-hl' if loop.index0 == sec.hl }}">{{ c|rl|safe }}</td>{% endif %}{% endfor %}</tr>{% endfor %}</tbody>
+  </table></div>
+  {% if sec.note %}<p class="small muted mt-2">{{ sec.note|rl|safe }}</p>{% endif %}
+</div></section>
+
+{% elif k == 'stats' %}
+<section class="section section--tight{{ ' section--dark' if sec.dark }}"><div class="container">
+  <div class="stats">
+    {% for s in sec.items %}<div class="stat reveal"><span class="stat__num" data-count="{{ s.n }}" data-suffix="{{ s.suffix or '' }}">{{ s.n }}{{ s.suffix or '' }}</span><span class="stat__label">{{ s.label }}</span>{% if s.small %}<small>{{ s.small }}</small>{% endif %}</div>{% endfor %}
+  </div>
+</div></section>
+
+{% elif k == 'faq' %}
+<section class="section{{ ' section--alt' if sec.alt }}"{% if sec.id %} id="{{ sec.id }}"{% endif %}><div class="container container--narrow">
+  {{ sec_head(sec.eyebrow or 'سوالات متداول', sec.title or 'پاسخ به پرسش‌های پرتکرار', sec.desc, True) }}
+  {{ faq(sec.items, sec.open_first) }}
+</div></section>
+
+{% elif k == 'links' %}
+<section class="section section--tight{{ ' section--alt' if sec.alt }}"{% if sec.id %} id="{{ sec.id }}"{% endif %}><div class="container">
+  {{ sec_head(sec.eyebrow, sec.title, sec.desc, sec.center) }}
+  <div class="link-cards">
+    {% for it in sec.items %}<a class="link-card reveal" href="{{ url(it.href) }}">{% if it.icon %}<span class="type-tile__ico" style="--c:{{ it.color or '#0e958c' }}">{{ icon(it.icon) }}</span>{% endif %}<span><strong>{{ it.title }}</strong>{% if it.text %}<small>{{ it.text }}</small>{% endif %}</span>{{ icon('arrow-left', 'i--go i--sm') }}</a>{% endfor %}
+  </div>
+</div></section>
+
+{% elif k == 'tech' %}
+<section class="section section--tight{{ ' section--alt' if sec.alt }}"{% if sec.id %} id="{{ sec.id }}"{% endif %}><div class="container">
+  {{ sec_head(sec.eyebrow, sec.title, sec.desc, sec.center) }}
+  <ul class="chip-row" style="{{ 'justify-content:center' if sec.center }}">{% for t in sec.items %}<li class="tech reveal" style="--tc:{{ t[2] }}">{{ icon(t[1]) }} {{ t[0] }}</li>{% endfor %}</ul>
+</div></section>
+
+{% elif k == 'plans' %}
+<section class="section{{ ' section--alt' if sec.alt }}"{% if sec.id %} id="{{ sec.id }}"{% endif %}><div class="container">
+  {{ sec_head(sec.eyebrow, sec.title, sec.desc, sec.center) }}
+  <div class="plans">
+    {% for p in sec.items %}
+    <article class="plan{{ ' plan--pop' if p.pop }} reveal" style="--d:{{ loop.index0 * 0.08 }}s">
+      {% if p.flag %}<span class="plan__flag">{{ p.flag }}</span>{% endif %}
+      <h3 class="plan__name">{{ p.name }}</h3>
+      <p class="plan__desc">{{ p.desc }}</p>
+      <div class="plan__price">{{ p.price }}<small>{{ p.unit }}</small></div>
+      <ul class="plan__list">{% for f in p.features %}<li>{{ icon('check') }}<span>{{ f }}</span></li>{% endfor %}</ul>
+      <a class="btn {{ 'btn--cta' if p.pop else 'btn--primary' }}" href="{{ url(p.href or '/contact-us/') }}">{{ p.cta or 'دریافت مشاوره و قیمت' }} {{ icon('arrow-left', 'i--arrow') }}</a>
+    </article>
+    {% endfor %}
+  </div>
+  {% if sec.note %}<p class="plan__note mt-3">{{ sec.note|rl|safe }}</p>{% endif %}
+</div></section>
+
+{% elif k == 'cta' %}
+{{ cta_band(sec.title, sec.text, sec.primary, sec.secondary) }}
+
+{% elif k == 'types' %}
+<section class="section{{ ' section--alt' if sec.alt }}"{% if sec.id %} id="{{ sec.id }}"{% endif %}><div class="container">
+  {{ sec_head(sec.eyebrow, sec.title, sec.desc, sec.center) }}
+  <div class="types">{% for t in (TYPES[:sec.limit] if sec.limit else TYPES) %}{{ type_tile(t) }}{% endfor %}</div>
+  {% if sec.link %}<p class="center mt-3"><a class="btn btn--ghost" href="{{ url('/services/web-design/') }}">مشاهده‌ی همه‌ی انواع سایت {{ icon('arrow-left', 'i--arrow') }}</a></p>{% endif %}
+</div></section>
+
+{% elif k == 'projects' %}
+<section class="section{{ ' section--alt' if sec.alt }}"{% if sec.id %} id="{{ sec.id }}"{% endif %}><div class="container">
+  {{ sec_head(sec.eyebrow, sec.title, sec.desc, sec.center) }}
+  <div class="projects">{% for s in sec.slugs %}{{ project_card(PROJECTS[s]) }}{% endfor %}</div>
+  <p class="center mt-3"><a class="btn btn--ghost" href="{{ url('/portfolio/') }}">مشاهده‌ی همه‌ی نمونه‌کارها {{ icon('arrow-left', 'i--arrow') }}</a></p>
+</div></section>
+
+{% elif k == 'vs' %}
+<section class="section{{ ' section--alt' if sec.alt }}"{% if sec.id %} id="{{ sec.id }}"{% endif %}><div class="container">
+  {{ sec_head(sec.eyebrow, sec.title, sec.desc, sec.center) }}
+  <div class="vs">
+    {% for c in sec.cols %}<div class="vs__col{{ ' vs__col--win' if c.win }} reveal"><h3>{{ icon(c.icon) }} {{ c.title }}</h3><p class="muted">{{ c.text }}</p><ul class="checklist">{% for p in c.points %}<li>{{ icon('check') }}<span>{{ p }}</span></li>{% endfor %}</ul></div>{% endfor %}
+  </div>
+</div></section>
+
+{% elif k == 'form' %}
+<section class="section section--alt"{% if sec.id %} id="{{ sec.id }}"{% else %} id="consult"{% endif %}><div class="container">
+  <div class="split split--wide-right">
+    <div class="reveal">
+      {{ sec_head(sec.eyebrow or 'مشاوره‌ی رایگان', sec.title or 'پروژه‌ی خود را با ما در میان بگذارید', sec.desc) }}
+      <ul class="checklist">{% for p in (sec.points or ['پاسخ در ' ~ SITE.response_time, 'بررسی نیاز و ارائه‌ی پیشنهاد بدون تعهد', 'برآورد زمان و هزینه‌ی شفاف', 'امکان جلسه‌ی حضوری در دفتر آمل']) %}<li>{{ icon('check') }}<span>{{ p }}</span></li>{% endfor %}</ul>
+    </div>
+    <div class="lead-card reveal"><h3>{{ sec.form_title or 'درخواست مشاوره‌ی رایگان' }}</h3><p class="muted small">فقط چند ثانیه؛ بقیه‌اش با ما.</p>{{ lead_form(sec.fid or 'f-' ~ idx, sec.service or '', 'full') }}</div>
+  </div>
+</div></section>
+
+{% elif k == 'posts' %}
+<section class="section{{ ' section--alt' if sec.alt }}"{% if sec.id %} id="{{ sec.id }}"{% endif %}><div class="container">
+  {{ sec_head(sec.eyebrow, sec.title, sec.desc, sec.center) }}
+  <div class="posts">{% for s in sec.slugs %}{{ post_card(POSTS[s]) }}{% endfor %}</div>
+</div></section>
+
+{% elif k == 'callout' %}
+<section class="section section--tight"><div class="container container--narrow"><div class="callout{{ ' callout--warn' if sec.warn }} reveal">{{ icon(sec.icon or 'info') }}<p>{{ sec.text|rl|safe }}</p></div></div></section>
+
+{% elif k == 'modules' %}
+<section class="section{{ ' section--alt' if sec.alt }}"{% if sec.id %} id="{{ sec.id }}"{% endif %}><div class="container container--narrow">
+  {{ sec_head(sec.eyebrow, sec.title, sec.desc, True) }}
+  <div class="modules">
+    {% for ti, tag, pts in sec.items %}
+    <details class="module reveal"{% if loop.first %} open{% endif %}><summary><h3>{{ ti }}</h3><span class="chip">{{ tag }}</span>{{ icon('chevron-down') }}</summary>
+      <div class="module__body"><ul>{% for p in pts %}<li>{{ p }}</li>{% endfor %}</ul></div></details>
+    {% endfor %}
+  </div>
+</div></section>
+
+{% elif k == 'team' %}
+<section class="section{{ ' section--alt' if sec.alt }}"{% if sec.id %} id="{{ sec.id }}"{% endif %}><div class="container">
+  {{ sec_head(sec.eyebrow, sec.title, sec.desc, sec.center) }}
+  <div class="team">
+    {% for p in TEAM %}<article class="member reveal"><div class="avatar">{% if p.photo %}<img src="{{ asset('img/' ~ p.photo) }}" width="92" height="92" loading="lazy" alt="{{ p.name }}">{% else %}{{ p.initials }}{% endif %}</div><h3>{{ p.name }}</h3><small>{{ p.role }}</small><p>{{ p.text }}</p></article>{% endfor %}
+  </div>
+</div></section>
+
+{% elif k == 'license' %}
+<section class="section{{ ' section--alt' if sec.alt }}"{% if sec.id %} id="{{ sec.id }}"{% endif %}><div class="container">
+  <div class="license reveal">
+    <div class="license__img" data-lightbox="{{ asset('img/team/business-license.webp') }}"><img src="{{ asset('img/team/business-license.webp') }}" width="1000" height="708" loading="lazy" alt="پروانه‌ی کسب فناوری اطلاعات آمل نوین از اتحادیه‌ی خدمات رایانه‌ای و اطلاع‌رسانی شهرستان آمل"></div>
+    <div>
+      {{ sec_head(sec.eyebrow or 'مجوز و اعتماد', sec.title or 'پروانه‌ی کسب رسمی و قرارداد کتبی', None) }}
+      <p class="muted">{{ sec.text }}</p>
+      <ul class="checklist">{% for p in sec.points %}<li>{{ icon('check') }}<span>{{ p }}</span></li>{% endfor %}</ul>
+    </div>
+  </div>
+</div></section>
+
+{% elif k == 'facts' %}
+<section class="section section--tight{{ ' section--alt' if sec.alt }}"><div class="container"><div class="facts-grid">
+  {% for ic, lb, vl in sec.items %}<div class="fact reveal"><small>{{ icon(ic, 'i--sm') }} {{ lb }}</small><strong>{{ vl }}</strong></div>{% endfor %}
+</div></div></section>
+
+{% elif k == 'timeline' %}
+<section class="section{{ ' section--alt' if sec.alt }}"{% if sec.id %} id="{{ sec.id }}"{% endif %}><div class="container container--narrow">
+  {{ sec_head(sec.eyebrow, sec.title, sec.desc) }}
+  <ul class="timeline">{% for dt, ti, tx in sec.items %}<li class="reveal"><small>{{ dt }}</small><h3>{{ ti }}</h3><p>{{ tx }}</p></li>{% endfor %}</ul>
+</div></section>
+
+{% elif k == 'calc' %}
+<section class="section" id="calculator"><div class="container">
+  {{ sec_head('ماشین‌حساب هزینه', 'برآورد هزینه‌ی طراحی سایت در کمتر از یک دقیقه', 'نوع سایت، تعداد صفحات و امکانات را انتخاب کنید تا برآورد اولیه را فوری ببینید. قیمت قطعی پس از جلسه‌ی مشاوره‌ی رایگان و بررسی نیاز شما اعلام می‌شود.', False) }}
+  <div class="calc" data-calc='{{ CALC|tojson }}'>
+    <div class="calc__panel reveal">
+      <div class="calc__group"><h3><span class="n">۱</span> نوع سایت</h3>
+        <div class="calc__types">{% for ty in CALC.types %}<label><input type="radio" name="ctype" value="{{ loop.index0 }}"{{ ' checked' if loop.first }}><span>{{ icon(ty.icon) }} {{ ty.label }}</span></label>{% endfor %}</div></div>
+      <div class="calc__group"><h3><span class="n">۲</span> تعداد صفحات</h3>
+        <div class="range-row"><input type="range" name="pages" min="3" max="40" value="8" aria-label="تعداد صفحات"><div class="flex between"><span class="muted small">۳ صفحه</span><output><strong data-calc-pages>۸</strong> صفحه</output><span class="muted small">۴۰ صفحه</span></div></div></div>
+      <div class="calc__group"><h3><span class="n">۳</span> امکانات اضافه</h3>
+        <div class="calc__opts">{% for o in CALC.options %}<label><input type="checkbox" name="opt" value="{{ loop.index0 }}"><span>{{ o.label }} <em>+{{ o.price }} م</em></span></label>{% endfor %}</div></div>
+      <div class="calc__group"><h3><span class="n">۴</span> تعداد زبان‌ها</h3>
+        <div class="field"><label class="sr-only" for="calc-lang">زبان‌ها</label><select id="calc-lang" name="lang"><option value="1">فقط فارسی</option><option value="2">فارسی و انگلیسی</option><option value="3">سه زبان (فارسی، انگلیسی، عربی)</option></select></div></div>
+    </div>
+    <aside class="calc__result reveal" aria-live="polite">
+      <h3>برآورد اولیه‌ی هزینه</h3>
+      <div class="calc__total" data-calc-total>۰ <small>میلیون تومان (برآورد اولیه)</small></div>
+      <p class="mb-0 small">زمان تقریبی تحویل: <strong data-calc-time>—</strong></p>
+      <dl class="calc__sum" data-calc-sum></dl>
+      <button class="btn btn--cta btn--block" type="button" data-calc-send>{{ icon('send') }} ثبت درخواست با این برآورد</button>
+      <p class="calc__disclaimer">این عدد صرفاً یک برآورد راهنماست و تعهد قیمت نیست. هزینه‌ی دامنه، هاست و افزونه‌های پولی ثالث جدا محاسبه می‌شود.</p>
+    </aside>
+  </div>
+</div></section>
+
+{% elif k == 'contact' %}
+<section class="section" id="contact"><div class="container">
+  {{ sec_head('راه‌های ارتباطی', 'تماس با آمل نوین؛ هر راهی که راحت‌ترید', 'تلفن، واتساپ، ایمیل یا مراجعه‌ی حضوری در آمل؛ همه‌ی راه‌ها به یک تیم می‌رسد.', False) }}
+  <div class="contact-cards">
+    <a class="contact-card reveal" href="tel:{{ SITE.phone_intl }}"><span class="ico">{{ icon('phone-call') }}</span><span><small>تماس تلفنی</small><strong dir="ltr">{{ SITE.phone_display }}</strong><span>پاسخ‌گویی ۲۴/۷</span></span></a>
+    <a class="contact-card reveal" href="{{ SITE.whatsapp }}" target="_blank" rel="noopener"><span class="ico ico--wa">{{ icon('b-whatsapp') }}</span><span><small>واتساپ</small><strong>گفتگوی آنلاین</strong><span>پاسخ در {{ SITE.response_time }}</span></span></a>
+    <a class="contact-card reveal" href="mailto:{{ SITE.email }}"><span class="ico">{{ icon('mail') }}</span><span><small>ایمیل</small><strong dir="ltr">{{ SITE.email }}</strong><span>برای ارسال فایل و RFP</span></span></a>
+    <div class="contact-card reveal"><span class="ico">{{ icon('map-pin') }}</span><span><small>دفتر آمل</small><strong>{{ SITE.street }}</strong><span>{{ SITE.region }}، {{ SITE.city }} — با هماهنگی قبلی</span></span></div>
+  </div>
+  <div class="contact-grid mt-4">
+    <div class="lead-card reveal"><h2 style="font-size:1.35rem">فرم درخواست مشاوره‌ی رایگان</h2><p class="muted">اطلاعات را بنویسید تا کارشناس ما در {{ SITE.response_time }} تماس بگیرد.</p>{{ lead_form('f-contact', '', 'full', 'ارسال درخواست', 5) }}</div>
+    <div class="reveal">{{ map_card() }}
+      <div class="card mt-3"><h3>{{ icon('clock') }} ساعت پاسخ‌گویی</h3>
+        <div class="hours"><div><span>پاسخ در واتساپ و تماس</span><strong>۲۴ ساعته</strong></div><div><span>جلسه‌ی حضوری در دفتر</span><strong>با هماهنگی قبلی</strong></div><div><span>سقف زمان پاسخ به درخواست‌ها</span><strong>کمتر از ۲ ساعت</strong></div></div></div>
+    </div>
+  </div>
+</div></section>
+
+{% elif k == 'chooser' %}
+<section class="section section--alt" id="chooser"><div class="container container--narrow">
+  {{ sec_head('پیشنهاد هوشمند', 'کدام نوع سایت برای کسب‌وکار من مناسب است؟', 'نوع کسب‌وکارتان را انتخاب کنید تا ساختار و امکانات پیشنهادی را ببینید.', True) }}
+  <div class="lead-card reveal" data-chooser='{{ CHOOSER|tojson }}'>
+    <div class="field"><label for="chooser-sel">کسب‌وکار من:</label><select id="chooser-sel"><option value="">— انتخاب کنید —</option>{% for v, l in CHOOSER_OPTS %}<option value="{{ v }}">{{ l }}</option>{% endfor %}</select></div>
+    <div class="chooser__out" aria-live="polite"></div>
+  </div></div></section>
+
+{% elif k == 'html' %}
+{{ sec.html|rl|safe }}
+{% endif %}
+{%- endmacro %}

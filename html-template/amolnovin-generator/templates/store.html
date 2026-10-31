@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% import "macros.html" as m with context %}
+{% block main %}
+{% include "partials/page_hero.html" %}
+<section class="section" id="products" aria-labelledby="products-title">
+  <div class="container">
+    {{ m.sec_head('افزونه‌ها', PRODUCTS|length|string ~ ' افزونه وردپرس و ووکامرس کاربردی', 'همه‌ی افزونه‌ها توسط تیم آمل نوین نوشته، آزمایش و پشتیبانی می‌شوند. سه افزونه بدون نیاز به لایسنس ارائه می‌شود.', False, 'products-title') }}
+    <div class="toolbar">
+      <div class="filters" role="group" aria-label="فیلتر افزونه‌ها">
+        {% for k, l in STORE_CATS %}<button class="filter-btn{{ ' is-active' if loop.first }}" type="button" data-filter="{{ k }}" aria-pressed="{{ 'true' if loop.first else 'false' }}">{{ l }}</button>{% endfor %}
+        <span style="width:1px;background:var(--line-2);margin-inline:.3rem"></span>
+        <button class="filter-btn" type="button" data-filter="free" aria-pressed="false">بدون لایسنس</button>
+        <button class="filter-btn" type="button" data-filter="paid" aria-pressed="false">نیازمند لایسنس</button>
+      </div>
+      <div class="toolbar__search">{{ icon('search') }}<input type="search" data-filter-search placeholder="جست‌وجوی افزونه…" aria-label="جست‌وجوی افزونه"></div>
+    </div>
+    <p class="result-count">نمایش <strong data-filter-count>{{ PRODUCTS|length }}</strong> افزونه</p>
+    <div class="products" data-filter-group=".products .product">{% for pr in PRODUCTS %}{{ m.product_card(pr) }}{% endfor %}</div>
+    <div class="empty-state"><p>افزونه‌ای با این مشخصات پیدا نشد. <a href="{{ url('/services/coding/') }}">برای ساخت افزونه‌ی اختصاصی</a> با ما تماس بگیرید.</p></div>
+  </div>
+</section>
+{% for sec in page.sections %}{{ m.render_section(sec, loop.index) }}{% endfor %}
+{% endblock %}

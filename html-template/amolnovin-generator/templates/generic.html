@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% import "macros.html" as m with context %}
+{% block main %}
+{% include "partials/page_hero.html" %}
+{% if page.subnav %}
+<nav class="subnav" aria-label="پیمایش صفحه"><div class="container subnav__in">{% for s in page.sections if s.id and s.nav %}<a href="#{{ s.id }}">{{ s.nav }}</a>{% endfor %}</div></nav>
+{% endif %}
+{% for sec in page.sections %}{{ m.render_section(sec, loop.index) }}
+{% endfor %}
+{% endblock %}

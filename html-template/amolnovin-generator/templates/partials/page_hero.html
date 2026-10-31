@@ -1,0 +1,31 @@
+{% import "macros.html" as m with context %}
+<section class="page-hero">
+  <div class="container">
+    {{ m.breadcrumb(page.crumbs) }}
+    <div class="page-hero__grid{{ '' if page.hero and page.hero.visual else ' page-hero__grid--solo' }}">
+      <div>
+        {% if page.eyebrow %}<span class="eyebrow">{{ page.eyebrow }}</span>{% endif %}
+        <h1>{{ page.h1|safe }}</h1>
+        <p class="lead">{{ page.lead|rl|safe }}</p>
+        {% if page.hero and page.hero.chips %}<ul class="chip-row">{% for c in page.hero.chips %}<li class="chip">{{ c }}</li>{% endfor %}</ul>{% endif %}
+        {% if page.hero and page.hero.cta %}<div class="btn-row">{% for c in page.hero.cta %}<a class="btn {{ c[2] if c|length > 2 else 'btn--cta' }} btn--lg" href="{{ url(c[1]) if c[1].startswith('/') or c[1].startswith('#') else c[1] }}">{{ c[0] }}</a>{% endfor %}</div>{% endif %}
+        {% if page.hero and page.hero.meta %}<div class="page-hero__meta">{% for ic, tx in page.hero.meta %}<span>{{ icon(ic) }} {{ tx }}</span>{% endfor %}</div>{% endif %}
+      </div>
+      {% if page.hero and page.hero.visual %}
+      <div class="page-hero__visual">
+        {% set v = page.hero.visual %}
+        {% if v[0] == 'mock' %}{{ m.mockup(v[1], v[2] if v|length > 2 else '') }}
+        {% elif v[0] == 'img' %}<div class="img-frame"><img src="{{ asset(v[1]) }}" width="{{ v[3] }}" height="{{ v[4] }}" alt="{{ v[2] }}" fetchpriority="high"></div>
+        {% elif v[0] == 'html' %}{{ v[1]|rl|safe }}{% endif %}
+      </div>
+      {% endif %}
+    </div>
+  </div>
+</section>
+{% if page.tldr %}
+<section class="section section--tight" aria-label="خلاصه‌ی پاسخ">
+  <div class="container container--narrow">
+    <div class="tldr reveal"><span class="tldr__icon">{{ icon('sparkles') }}</span><div><strong class="tldr__title">خلاصه‌ی پاسخ</strong><p>{{ page.tldr|rl|safe }}</p></div></div>
+  </div>
+</section>
+{% endif %}

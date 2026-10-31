@@ -1,0 +1,110 @@
+{% import "macros.html" as m with context %}
+<a class="skip-link" href="#content">پرش به محتوای اصلی</a>
+<div class="progress-bar" aria-hidden="true"><span></span></div>
+<div class="topbar">
+  <div class="container topbar__in">
+    <div class="topbar__group">
+      <span class="topbar__item">{{ icon('map-pin') }} {{ SITE.address }}</span>
+      <a class="topbar__item" href="mailto:{{ SITE.email }}">{{ icon('mail') }} <span dir="ltr">{{ SITE.email }}</span></a>
+    </div>
+    <div class="topbar__group">
+      <span class="topbar__live">پاسخ‌گویی ۲۴/۷</span>
+      <a class="topbar__item" href="tel:{{ SITE.phone_intl }}">{{ icon('phone-call') }} <span dir="ltr">{{ SITE.phone_display }}</span></a>
+    </div>
+  </div>
+</div>
+<header class="site-header" id="top">
+  <div class="container header__in">
+    <a class="brand" href="{{ url('/') }}" aria-label="{{ SITE.name }} — صفحه‌ی اصلی">
+      <img class="brand__mark brand__mark--dark" src="{{ asset('img/brand/logo-mark.svg') }}" width="58" height="29" alt="لوگوی {{ SITE.short }}">
+      <img class="brand__mark brand__mark--light" src="{{ asset('img/brand/logo-mark-light.svg') }}" width="58" height="29" alt="" aria-hidden="true">
+      <span class="brand__text"><strong>{{ SITE.short }}</strong><small>فناوری اطلاعات</small></span>
+    </a>
+    <nav class="nav" aria-label="منوی اصلی">
+      <ul class="nav__list">
+        <li class="has-mega">
+          <button class="nav__link {{ 'is-current' if page.path.startswith('/services/') and not page.path.startswith('/services/web-design/') }}" type="button" aria-expanded="false" aria-controls="mega-services">خدمات {{ icon('chevron-down') }}</button>
+          <div class="mega" id="mega-services"><div class="container"><div class="mega__panel mega__panel--services">
+            <div class="mega__cols mega__cols--span2">
+              <p class="mega__title">خدمات آمل نوین</p>
+              {% for s in NAV_SERVICES %}
+              <a class="mega__link" href="{{ url(s[0]) }}"><span class="mega__ico" style="--c:{{ s[4] }}">{{ icon(s[3]) }}</span><span><strong>{{ s[1] }}</strong><small>{{ s[2] }}</small></span></a>
+              {% endfor %}
+            </div>
+            <aside class="mega__promo">
+              <div><span class="badge badge--amber">مشاوره‌ی رایگان</span></div>
+              <h4>سایتتان را از چه نقطه‌ای شروع کنیم؟</h4>
+              <p>در یک جلسه‌ی کوتاه نیاز شما را بررسی می‌کنیم و بدون تعهد، پیشنهاد و برآورد می‌دهیم.</p>
+              <div class="price-from"><small>طراحی سایت از</small> {{ SITE.price_design }} میلیون تومان</div>
+              <a class="btn btn--cta btn--sm" href="{{ url('/contact-us/') }}">{{ icon('message-circle') }} درخواست مشاوره</a>
+            </aside>
+          </div></div></div>
+        </li>
+        <li class="has-mega">
+          <button class="nav__link {{ 'is-current' if page.path.startswith('/services/web-design/') }}" type="button" aria-expanded="false" aria-controls="mega-types">انواع سایت {{ icon('chevron-down') }}</button>
+          <div class="mega" id="mega-types"><div class="container"><div class="mega__panel mega__panel--types">
+            <div class="mega__cols mega__cols--4">
+              <p class="mega__title">طراحی سایت برای کسب‌وکار شما</p>
+              {% for t in TYPES %}
+              <a class="mega__link mega__link--sm" href="{{ url('/services/web-design/' ~ t.slug ~ '/') }}"><span class="mega__ico" style="--c:{{ t.color }}">{{ icon(t.icon) }}</span><span><strong>{{ t.title.replace('طراحی سایت ', '').replace('طراحی ', '') }}</strong></span></a>
+              {% endfor %}
+            </div>
+            <aside class="mega__promo">
+              <h4>کدام نوع سایت مناسب شماست؟</h4>
+              <p>نوع کسب‌وکارتان را انتخاب کنید تا بهترین ساختار سایت و امکانات پیشنهادی را ببینید.</p>
+              <a class="btn btn--cta btn--sm" href="{{ url('/services/web-design/#chooser') }}">{{ icon('wand-sparkles') }} پیشنهاد هوشمند</a>
+            </aside>
+            <div class="mega__foot"><span class="muted small">{{ TYPES|length }} نوع سایت، هر کدام با صفحه‌ی اختصاصی</span><a class="link-arrow" href="{{ url('/services/web-design/') }}">مشاهده‌ی همه‌ی انواع سایت {{ icon('arrow-left') }}</a></div>
+          </div></div></div>
+        </li>
+        <li><a class="nav__link" href="{{ url('/wordpress-web-design/') }}" {{ 'aria-current=page' if page.path == '/wordpress-web-design/' }}>طراحی سایت وردپرس</a></li>
+        <li><a class="nav__link" href="{{ url('/portfolio/') }}" {{ 'aria-current=page' if page.path.startswith('/portfolio/') or page.path.startswith('/projects/') }}>نمونه‌کارها</a></li>
+        <li><a class="nav__link" href="{{ url('/price-wordpress/') }}" {{ 'aria-current=page' if page.path == '/price-wordpress/' }}>هزینه طراحی سایت</a></li>
+        <li><a class="nav__link" href="{{ url('/blog-n/') }}" {{ 'aria-current=page' if page.kind in ('blog','post') }}>وبلاگ</a></li>
+        <li class="has-mega has-mega--menu">
+          <button class="nav__link" type="button" aria-expanded="false" aria-controls="mega-more">بیشتر {{ icon('chevron-down') }}</button>
+          <div class="mega mega--menu" id="mega-more"><div class="mega__panel mega__panel--menu">
+            <div class="mega__cols mega__cols--1">
+              {% for h, l, i in NAV_MORE %}<a class="mega__link mega__link--sm" href="{{ url(h) }}"><span class="mega__ico">{{ icon(i) }}</span><span><strong>{{ l }}</strong></span></a>{% endfor %}
+            </div>
+          </div></div>
+        </li>
+      </ul>
+    </nav>
+    <div class="header__actions">
+      <button class="icon-btn" type="button" data-search-open aria-label="جست‌وجو در سایت (Ctrl+K)" title="جست‌وجو">{{ icon('search') }}</button>
+      <button class="icon-btn theme-toggle" type="button" data-theme-toggle aria-label="تغییر حالت روشن و تاریک" title="حالت تیره / روشن">{{ icon('moon', 'i-moon') }}{{ icon('sun', 'i-sun') }}</button>
+      <a class="btn btn--cta btn--sm" href="{{ url('/contact-us/') }}">{{ icon('message-circle') }} مشاوره‌ی رایگان</a>
+      <button class="icon-btn burger" type="button" data-menu-open aria-label="باز کردن منو" aria-controls="drawer" aria-expanded="false">{{ icon('menu') }}</button>
+    </div>
+  </div>
+</header>
+<div class="drawer" id="drawer" aria-hidden="true">
+  <div class="drawer__backdrop" data-menu-close></div>
+  <div class="drawer__panel" role="dialog" aria-modal="true" aria-label="منوی موبایل">
+    <div class="drawer__head">
+      <a class="brand" href="{{ url('/') }}"><img class="brand__mark brand__mark--dark" src="{{ asset('img/brand/logo-mark.svg') }}" width="52" height="26" alt=""><img class="brand__mark brand__mark--light" src="{{ asset('img/brand/logo-mark-light.svg') }}" width="52" height="26" alt=""><span class="brand__text"><strong>{{ SITE.short }}</strong></span></a>
+      <button class="icon-btn" type="button" data-menu-close aria-label="بستن منو">{{ icon('x') }}</button>
+    </div>
+    <div class="drawer__body">
+      <details class="drawer__group"><summary>خدمات {{ icon('chevron-down') }}</summary>
+        <div class="drawer__sub">{% for s in NAV_SERVICES %}<a href="{{ url(s[0]) }}">{{ icon(s[3]) }} {{ s[1] }}</a>{% endfor %}</div></details>
+      <details class="drawer__group"><summary>انواع سایت {{ icon('chevron-down') }}</summary>
+        <div class="drawer__sub">{% for t in TYPES %}<a href="{{ url('/services/web-design/' ~ t.slug ~ '/') }}">{{ icon(t.icon) }} {{ t.title }}</a>{% endfor %}
+        <a href="{{ url('/services/web-design/') }}"><strong>مشاهده‌ی همه {{ icon('arrow-left') }}</strong></a></div></details>
+      <a class="drawer__link" href="{{ url('/wordpress-web-design/') }}">طراحی سایت وردپرس</a>
+      <a class="drawer__link" href="{{ url('/portfolio/') }}">نمونه‌کارها</a>
+      <a class="drawer__link" href="{{ url('/price-wordpress/') }}">هزینه طراحی سایت</a>
+      <a class="drawer__link" href="{{ url('/blog-n/') }}">وبلاگ</a>
+      <a class="drawer__link" href="{{ url('/wordpress-learn/') }}">آموزش وردپرس</a>
+      <a class="drawer__link" href="{{ url('/wplm-store/') }}">فروشگاه افزونه‌ها</a>
+      <a class="drawer__link" href="{{ url('/about-us/') }}">درباره‌ی ما</a>
+      <a class="drawer__link" href="{{ url('/resume/') }}">رزومه‌ی مجموعه</a>
+      <a class="drawer__link" href="{{ url('/contact-us/') }}">تماس با ما</a>
+    </div>
+    <div class="drawer__foot">
+      <a class="btn btn--cta btn--block" href="tel:{{ SITE.phone_intl }}">{{ icon('phone-call') }} تماس: <span dir="ltr">{{ SITE.phone_display }}</span></a>
+      <a class="btn btn--wa btn--block" href="{{ SITE.whatsapp }}" rel="noopener" target="_blank">{{ icon('b-whatsapp') }} پیام در واتساپ</a>
+    </div>
+  </div>
+</div>
