@@ -53,12 +53,7 @@ jobs:
           cache: npm
           cache-dependency-path: wordpress-theme/amolnovin/package-lock.json
 
-      - name: Install dependencies
-        working-directory: wordpress-theme/amolnovin
-        run: |
-          composer install --no-dev --optimize-autoloader --no-interaction --no-progress
-          npm ci --no-audit --no-fund
-
+      # build-zip.sh installs composer/npm dependencies inside a staging copy and compiles the assets
       - name: Build theme ZIP
         working-directory: wordpress-theme
         run: |
