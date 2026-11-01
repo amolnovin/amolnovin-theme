@@ -240,6 +240,13 @@ class Patcher
             return new \WP_Error('amol_patch_unverifiable', 'این پچ فهرست فایل و امضای SHA-256 ندارد؛ برای امنیت اعمال نمی‌شود.');
         }
 
+        // fail before the download when no backup folder can be created (clear message instead of a half update)
+        $ready = self::prepareBackups();
+
+        if (is_wp_error($ready)) {
+            return $ready;
+        }
+
         $url = self::packageUrl((string) ($release['package'] ?? ''));
 
         if (is_wp_error($url)) {
@@ -307,6 +314,12 @@ class Patcher
 
         if (is_wp_error($check)) {
             return $check;
+        }
+
+        $ready = self::prepareBackups();
+
+        if (is_wp_error($ready)) {
+            return $ready;
         }
 
         $result = self::installFromZip($uploadedFile, $release);
@@ -432,14 +445,14 @@ class Patcher
 
         $theme = self::themeDir();
         $fs = self::fs();
-        $backup = trailingslashit(wp_upload_dir()['basedir']) . self::BACKUP_DIR . '/' . $release['_version'] . '-' . gmdate('Ymd-His');
+        $backup = self::backupDir((string) $release['_version']);
         $added = [];
         $copied = 0;
 
-        if (! $fs->mkdir($backup, FS_CHMOD_DIR)) {
+        if (is_wp_error($backup)) {
             self::rmdir($tmp);
 
-            return new \WP_Error('amol_patch_backup', 'ساخت پوشه‌ی پشتیبان ناموفق بود؛ پچ اعمال نشد.');
+            return $backup;
         }
 
         // backup folder lives under uploads/ so it is reachable over HTTP: keep it closed,
@@ -467,13 +480,23 @@ class Patcher
 
             $dir = dirname($target);
 
-            if (! $fs->is_dir($dir)) {
-                $fs->mkdir($dir, FS_CHMOD_DIR);
+            if (! self::makeDir($dir)) {
+                self::restoreBackup($theme, $backup, $added);
+                self::rmdir($tmp);
+
+                return new \WP_Error('amol_patch_dir', sprintf('ساخت پوشه‌ی «%s» در قالب ناموفق بود؛ تغییرات نیمه‌کاره بازگردانی شد.', $dir));
             }
 
             if ($fs->exists($target)) {
                 $backupFile = $backup . '/' . $relative;
-                $fs->mkdir(dirname($backupFile), FS_CHMOD_DIR);
+
+                if (! self::makeDir(dirname($backupFile))) {
+                    self::restoreBackup($theme, $backup, $added);
+                    self::rmdir($tmp);
+
+                    return new \WP_Error('amol_patch_backup_file', sprintf('نوشتن پشتیبان فایل «%s» ناموفق بود؛ تغییرات نیمه‌کاره بازگردانی شد.', $relative));
+                }
+
                 $fs->copy($target, $backupFile, true);
             } else {
                 $added[] = $relative;
@@ -501,8 +524,10 @@ class Patcher
             }
 
             $backupFile = $backup . '/' . $relative;
-            $fs->mkdir(dirname($backupFile), FS_CHMOD_DIR);
-            $fs->copy($target, $backupFile, true);
+
+            if (self::makeDir(dirname($backupFile))) {
+                $fs->copy($target, $backupFile, true);
+            }
 
             if ($fs->delete($target)) {
                 $deleted++;
@@ -753,6 +778,183 @@ class Patcher
     public static function isNewer(string $a, string $b): bool
     {
         return version_compare(self::cleanVersion($a), self::cleanVersion($b), '>');
+    }
+
+    /**
+     * Folder that receives the backup of every file the patch touches.
+     *
+     * uploads/amolnovin-backups/<version>-<date>/ is two levels deep, and WP_Filesystem::mkdir() is *not*
+     * recursive: older builds called it without the recursive flag, so the parent folder never existed and
+     * the update stopped with «ساخت پوشه‌ی پشتیبان ناموفق بود». The candidates are tried in order and every
+     * level is created recursively:
+     *
+     *   1. uploads/amolnovin-backups           (default, protected by .htaccess + index.php)
+     *   2. wp-content/amolnovin-backups        (uploads offloaded to a CDN or mounted read-only)
+     *   3. <temp>/amolnovin-backups            (last resort — the system may clean it)
+     *
+     * @return string|\WP_Error
+     */
+    protected static function backupDir(string $version)
+    {
+        $bases = self::backupBases();
+
+        if (! $bases) {
+            return new \WP_Error('amol_patch_backup', 'ساخت پوشه‌ی پشتیبان ناموفق بود؛ وردپرس در دسترس نیست.');
+        }
+
+        $name = trim(self::cleanVersion($version), '/') . '-' . gmdate('Ymd-His');
+
+        foreach ($bases as $base) {
+            if (! self::makeDir($base)) {
+                continue;
+            }
+
+            $dir = trailingslashit($base) . $name;
+
+            if (self::makeDir($dir)) {
+                return $dir;
+            }
+        }
+
+        return new \WP_Error('amol_patch_backup', sprintf(
+            'ساخت پوشه‌ی پشتیبان ناموفق بود؛ پچ اعمال نشد. مسیرهای امتحان‌شده: %s. دسترسی نوشتن این مسیرها را بررسی کنید (پوشه‌ی %s را با دسترسی ۷۵۵ بسازید) یا به‌جای پچ، ZIP کامل نسخه را از صفحه‌ی Releases نصب کنید.',
+            implode(' ، ', $bases),
+            self::BACKUP_DIR
+        ));
+    }
+
+    /**
+     * Folders that may hold the backups, in the order they are tried.
+     *
+     * @return array<int,string>
+     */
+    public static function backupBases(): array
+    {
+        if (! function_exists('wp_upload_dir')) {
+            return [];
+        }
+
+        $uploads = wp_upload_dir();
+        $bases = [];
+
+        if (empty($uploads['error']) && ! empty($uploads['basedir'])) {
+            $bases[] = trailingslashit((string) $uploads['basedir']) . self::BACKUP_DIR;
+        }
+
+        if (defined('WP_CONTENT_DIR')) {
+            $bases[] = trailingslashit((string) WP_CONTENT_DIR) . self::BACKUP_DIR;
+        }
+
+        if (function_exists('get_temp_dir')) {
+            $bases[] = trailingslashit(get_temp_dir()) . self::BACKUP_DIR;
+        }
+
+        return array_values(array_unique(array_filter($bases)));
+    }
+
+    /**
+     * State of every backup folder — read by the settings panel (تنظیمات → بروزرسانی قالب).
+     *
+     * @return array<int,array{path:string,exists:bool,writable:bool}>
+     */
+    public static function backupPaths(): array
+    {
+        $rows = [];
+
+        foreach (self::backupBases() as $base) {
+            $rows[] = [
+                'path' => $base,
+                'exists' => is_dir($base),
+                'writable' => self::dirWritable($base),
+            ];
+        }
+
+        return $rows;
+    }
+
+    /**
+     * Create the backup folder ahead of time (button «آماده‌سازی پوشه‌ی پشتیبان»).
+     *
+     * Being able to prepare it separately means a patch never fails *after* the download because of a
+     * missing/unwritable folder — the panel shows the exact path that worked.
+     *
+     * @return array{dir:string,created:bool}|\WP_Error
+     */
+    public static function prepareBackups()
+    {
+        $bases = self::backupBases();
+
+        if (! $bases) {
+            return new \WP_Error('amol_patch_backup', 'مسیر پشتیبان پیدا نشد؛ وردپرس در دسترس نیست.');
+        }
+
+        foreach ($bases as $base) {
+            $existed = is_dir($base);
+
+            if (self::makeDir($base)) {
+                return ['dir' => $base, 'created' => ! $existed];
+            }
+        }
+
+        return new \WP_Error('amol_patch_backup', sprintf(
+            'ساخت پوشه‌ی پشتیبان ناموفق بود. مسیرهای امتحان‌شده: %s. دسترسی نوشتن پوشه‌ی uploads را بررسی کنید (پوشه‌ی %s را با دسترسی ۷۵۵ بسازید) یا به‌جای پچ، ZIP کامل نسخه را نصب کنید.',
+            implode(' ، ', $bases),
+            self::BACKUP_DIR
+        ));
+    }
+
+    /**
+     * Create a folder recursively, whatever filesystem WordPress picked.
+     *
+     * `$fs->mkdir()` needs the recursive flag for nested paths and fails silently when the parent is
+     * missing; `wp_mkdir_p()` is the native recursive helper. Both are tried, then a plain `mkdir`.
+     */
+    protected static function makeDir(string $dir): bool
+    {
+        $dir = untrailingslashit($dir);
+
+        if ($dir === '') {
+            return false;
+        }
+
+        if (is_dir($dir)) {
+            return self::dirWritable($dir);
+        }
+
+        if (function_exists('wp_mkdir_p') && wp_mkdir_p($dir) && is_dir($dir)) {
+            return true;
+        }
+
+        $fs = self::fs();
+        $chmod = defined('FS_CHMOD_DIR') ? FS_CHMOD_DIR : 0755;
+
+        if ($fs->mkdir($dir, $chmod, true) && (is_dir($dir) || $fs->is_dir($dir))) {
+            return true;
+        }
+
+        return self::dirWritable($dir);
+    }
+
+    /** Writable check that also probes the folder — ACLs and hardened hosts can make is_writable() lie. */
+    protected static function dirWritable(string $dir): bool
+    {
+        if (! is_dir($dir)) {
+            return false;
+        }
+
+        if (is_writable($dir)) {
+            return true;
+        }
+
+        $probe = untrailingslashit($dir) . '/.amolnovin-write-test-' . uniqid();
+
+        if (@file_put_contents($probe, 'ok') === false) { // phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged, WordPress.WP.AlternativeFunctions.file_system_operations_file_put_contents
+            return false;
+        }
+
+        @unlink($probe); // phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged, WordPress.WP.AlternativeFunctions.unlink_unlink
+
+        return true;
     }
 
     protected static function fs()

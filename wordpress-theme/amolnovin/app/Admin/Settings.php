@@ -43,6 +43,7 @@ class Settings
         add_action('admin_post_amol_patch_check', [self::class, 'patchCheck']);
         add_action('admin_post_amol_patch_apply', [self::class, 'patchApply']);
         add_action('admin_post_amol_patch_rollback', [self::class, 'patchRollback']);
+        add_action('admin_post_amol_backup_prepare', [self::class, 'patchPrepareBackup']);
         add_action('admin_post_amol_patch_upload', [self::class, 'patchUpload']);
         add_action('admin_post_amol_rebuild_index', [self::class, 'rebuildIndex']);
         add_action('admin_notices', [self::class, 'updateNotice']);
@@ -561,6 +562,29 @@ class Settings
         submit_button('بررسی بروزرسانی', 'secondary', 'submit', false);
         echo '</form></div>';
 
+        // ---- backup folder health: an unwritable/absent backup folder is what stops a patch
+        echo '<div class="amol-card"><h2>سلامت بروزرسانی</h2>';
+        echo '<table class="widefat striped amol-status"><thead><tr><th>پوشه‌ی پشتیبان</th><th>وضعیت</th></tr></thead><tbody>';
+
+        foreach (Patcher::backupPaths() as $row) {
+            $badge = $row['writable']
+                ? '<span class="amol-badge amol-badge--ok">قابل نوشتن</span>'
+                : ($row['exists']
+                    ? '<span class="amol-badge amol-badge--off">قابل نوشتن نیست</span>'
+                    : '<span class="amol-badge amol-badge--wait">ساخته نشده</span>');
+
+            echo '<tr><td dir="ltr"><code>' . esc_html($row['path']) . '</code></td><td>' . $badge . '</td></tr>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- badge is static markup.
+        }
+
+        echo '</tbody></table>';
+        echo '<p class="description">پیش از اعمال پچ، هر فایل تغییرکرده در یکی از این پوشه‌ها پشتیبان می‌شود (اولی که قابل نوشتن باشد). اگر هیچ‌کدام قابل نوشتن نبود، بروزرسانی با پیام «ساخت پوشه‌ی پشتیبان ناموفق بود» متوقف می‌شود؛ با دکمه‌ی زیر می‌توانید پوشه را از پیش بسازید و همان لحظه نتیجه را ببینید.</p>';
+
+        echo '<form method="post" action="' . esc_url(admin_url('admin-post.php')) . '" class="amol-inline">';
+        wp_nonce_field('amol_backup_prepare');
+        echo '<input type="hidden" name="action" value="amol_backup_prepare">';
+        submit_button('آماده‌سازی پوشه‌ی پشتیبان', 'secondary', 'submit', false);
+        echo '<span class="description">معادل ساختن پوشه‌ی <code>' . esc_html(Patcher::BACKUP_DIR) . '</code> با دسترسی ۷۵۵ در <code>wp-content/uploads/</code>.</span></form></div>';
+
         if ($available) {
             echo '<div class="amol-card"><h2>بروزرسانی‌های موجود</h2><table class="widefat striped amol-status"><thead><tr><th>نسخه</th><th>تاریخ</th><th>توضیحات</th><th>فایل‌ها</th><th></th></tr></thead><tbody>';
 
@@ -923,6 +947,23 @@ class Settings
             (int) $result['deleted'],
             $result['backup']
         ));
+    }
+
+    /** «آماده‌سازی پوشه‌ی پشتیبان»: create it up front so a patch cannot fail after the download. */
+    public static function patchPrepareBackup(): void
+    {
+        check_admin_referer('amol_backup_prepare');
+        self::requireUpdater();
+
+        $result = Patcher::prepareBackups();
+
+        if (is_wp_error($result)) {
+            self::redirect('updates', 'error', $result->get_error_message());
+        }
+
+        self::redirect('updates', 'success', $result['created']
+            ? sprintf('پوشه‌ی پشتیبان ساخته شد: %s', $result['dir'])
+            : sprintf('پوشه‌ی پشتیبان از قبل موجود و قابل نوشتن است: %s', $result['dir']));
     }
 
     public static function patchRollback(): void
