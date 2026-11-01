@@ -2,7 +2,7 @@
   "schema": 1,
   "theme": "amolnovin",
   "name": "قالب وردپرس آمل نوین",
-  "generated": "2026-11-01T04:19:20Z",
+  "generated": "2026-11-01T12:41:28Z",
   "releases": [
     {
       "version": "1.1.1",
@@ -194,6 +194,82 @@
       "deleted": [],
       "package": "patches/amolnovin-1.0.0-to-1.1.1.zip",
       "sha256": "d643594b5952ed1ef9e54101257bc64e085f5f9d36e36f9880c224911d96e377"
+    },
+    {
+      "version": "1.2.0",
+      "date": "2026-11-01",
+      "channel": "stable",
+      "requires": {
+        "php": "8.4",
+        "wp": "6.6",
+        "from": [
+          "1.1.1"
+        ]
+      },
+      "notes": "هماهنگی با Custom HTML Snippets 3.0.3، CSS قطعه‌کد محدود به محتوا، عرض ۹۵٪ تک‌نوشته، خلاصه از چکیده (شامل فایل‌های build)",
+      "files": [
+        {
+          "path": "app/Admin/Settings.php",
+          "sha256": "c024c76c7741b16851d342de9f3a873dad469611c7997d406cc9ae95051f995b"
+        },
+        {
+          "path": "app/Content/Repo.php",
+          "sha256": "a8a3f2959fe4de3f6a39a5a6a7e9138ba0862aac8114a2c74a15fced183c4378"
+        },
+        {
+          "path": "app/Integrations/Plugins.php",
+          "sha256": "ca7d686dee4735cde6b6d7a4a81f9dd1bb7135fde6a82e110fce091f904d3cee"
+        },
+        {
+          "path": "app/Integrations/SnippetCss.php",
+          "sha256": "09434dcf328905ba2cdb51fcc5fdd526253d1632831d5467afea45344b41c224"
+        },
+        {
+          "path": "app/Integrations/Snippets.php",
+          "sha256": "993a62157c80c75463eacae6df87fc0ea0a0155ec8e32d36c6c200043ed58301"
+        },
+        {
+          "path": "app/Support/Options.php",
+          "sha256": "d11400e1a1807f26f6a7a2f33d014937a7e257de38e10a3c005c12b58bdc569d"
+        },
+        {
+          "path": "package-lock.json",
+          "sha256": "c8e1d7efca7409d662950d35b214a03533f94e7958b1b5cc6c9d09e999da0bb1"
+        },
+        {
+          "path": "package.json",
+          "sha256": "ab80ac4f9453c796c9098f087fda9c9f73ecac83f04758bdacc8ea52f2ea1081"
+        },
+        {
+          "path": "public/build/assets/app-C-BpqBcs.css",
+          "sha256": "a61d8907f78316d7c2727fd73525cf6dc034f40ee5bba6199d4068956b4e37dc"
+        },
+        {
+          "path": "public/build/manifest.json",
+          "sha256": "d86ff879b7050c4d178c55921306d658c1d16de9407d7d367e334b49d645a2fc"
+        },
+        {
+          "path": "resources/css/05-pages.css",
+          "sha256": "abd8c09a3bf3702a2532d498799e27f27087bafc93b8fdcd126a70ce494c9ac7"
+        },
+        {
+          "path": "resources/css/06-wp.css",
+          "sha256": "7edbe7ccdb7d2988b195332ffc2653815241c75b5fa1bda5fc0facf37087d769"
+        },
+        {
+          "path": "resources/views/single.blade.php",
+          "sha256": "1abae9c292a0158a80e3ee7b816acff7a254e0ad076b3387261aa4563aeebba1"
+        },
+        {
+          "path": "style.css",
+          "sha256": "3a285f82a21a76e2a6cca0fa87d76c0daf9911a5edf2524afadd634c19733aba"
+        }
+      ],
+      "deleted": [
+        "public/build/assets/app-BbPfL5V3.css"
+      ],
+      "package": "patches/amolnovin-1.1.1-to-1.2.0.zip",
+      "sha256": "6927da616c10ddb1113514c7428e342c3fd7c7d8e6e33b6b3e4b11b62f5aec94"
     }
   ]
 }

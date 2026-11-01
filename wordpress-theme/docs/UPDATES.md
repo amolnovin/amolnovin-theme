@@ -42,7 +42,8 @@ cd wordpress-theme
 git add -A && git commit -m "release 1.1.1" && git push
 
 # ۳) پچ از آخرین نسخه بسازید و کاتالوگ را به‌روز کنید
-./scripts/make-patch.sh v1.1.0 HEAD 1.1.1 "رفع باگ‌ها و بهبودها" 1.1.0
+#    اگر نسخه CSS/JS را عوض کرده، آرگومان ششم (build-ref) را هم بدهید تا فایل‌های build هم داخل پچ بروند:
+./scripts/make-patch.sh v1.1.0 HEAD 1.1.1 "رفع باگ‌ها و بهبودها" 1.1.0 v1.1.0
 git add updates && git commit -m "patch 1.1.1" && git push
 
 # ۴) تگ بسازید؛ GitHub Actions (.github/workflows/release.yml) خودش
@@ -50,7 +51,9 @@ git add updates && git commit -m "patch 1.1.1" && git push
 git tag v1.1.1 && git push origin v1.1.1
 ```
 
-بعد از ساخت Release، بسته‌ی پچ را به همان Release اضافه کنید (تا دکمه‌ی «بروزرسانی» در پیشخوان کار کند):
+بعد از ساخت Release، بسته‌ی پچ باید به همان Release هم بچسبد (تا دکمه‌ی «بروزرسانی» در پیشخوان کار کند).
+ورک‌فلوی `release.yml` این کار را خودکار انجام می‌دهد: هر فایل `updates/patches/amolnovin-*-to-<version>.zip`
+را پیدا می‌کند و به ریلیز اضافه می‌کند. برای نسخه‌های قدیمی‌تر یا آپلود دستی:
 
 ```bash
 gh release upload v1.1.1 updates/patches/amolnovin-1.1.0-to-1.1.1.zip --clobber

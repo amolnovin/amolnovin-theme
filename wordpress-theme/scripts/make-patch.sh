@@ -1,15 +1,23 @@
 #!/usr/bin/env bash
 # Builds an incremental patch of the theme between two git refs and registers it in updates/manifest.json.
 #
-#   ./scripts/make-patch.sh <from-ref> <to-ref> <version> ["release notes"] [base-version]
+#   ./scripts/make-patch.sh <from-ref> <to-ref> <version> ["release notes"] [base-version] [build-ref]
 #
 # Example:
 #   ./scripts/make-patch.sh v1.0.0 v1.1.0 1.1.0 "پنل تنظیمات و هماهنگی افزونه‌ها" 1.0.0
 #
+# `build-ref` (optional) also ships the compiled assets: the script builds the current tree and a
+# worktree of <build-ref> (npm ci && npm run build), diffs the two `public/build` folders and puts the
+# changed files into the patch. Use it whenever a release changes CSS/JS — the compiled bundle is not
+# tracked in git, so without it the patch would only carry the sources.
+#
+# Example with assets:
+#   ./scripts/make-patch.sh v1.1.1 HEAD 1.2.0 "هماهنگی با افزونه‌ی قطعه‌کدها" 1.1.1 v1.1.1
+#
 # Result:
 #   wordpress-theme/updates/patches/amolnovin-<base>-to-<version>.zip   (changed files + manifest.json)
 #   wordpress-theme/updates/manifest.json                              (catalogue entry with sha256)
-# Needs: git, zip, python3, sha256sum.
+# Needs: git, zip, python3, sha256sum (plus node/npm when build-ref is used).
 set -euo pipefail
 
 FROM_REF="${1:?from-ref is required (e.g. v1.0.0)}"
@@ -17,6 +25,7 @@ TO_REF="${2:?to-ref is required (e.g. v1.1.0 or HEAD)}"
 VERSION="${3:?version is required (e.g. 1.1.0)}"
 NOTES="${4:-}"
 BASE_VERSION="${5:-}"
+BUILD_REF="${6:-}"
 
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"        # wordpress-theme/
 REPO="$(cd "$HERE/.." && pwd)"                                  # repository root
@@ -45,6 +54,7 @@ git -C "$REPO" diff --name-status --find-renames "$FROM_REF" "$TO_REF" -- "$THEM
 
 CHANGED=()
 DELETED=()
+BUILT=()
 
 while IFS=$'\t' read -r status path _rest; do
   [ -n "${path:-}" ] || continue
@@ -76,6 +86,48 @@ for rel in "${CHANGED[@]}"; do
   mkdir -p "$STAGE/root/$(dirname "$rel")"
   git -C "$REPO" show "$TO_REF:${THEME_REL}/${rel}" > "$STAGE/root/$rel"
 done
+
+# -------------------------------------------------------------------------- compiled assets (optional)
+# public/build/ is git-ignored: a patch that changes CSS/JS only carries the sources unless the built
+# bundle is added here. We build the current tree and a worktree of $BUILD_REF and ship the difference.
+if [ -n "$BUILD_REF" ]; then
+  command -v npm >/dev/null 2>&1 || { echo "npm is required for the build-ref mode" >&2; exit 1; }
+
+  echo "building the assets (current tree + $BUILD_REF) …"
+
+  ( cd "$HERE/amolnovin" && { [ -d node_modules ] || npm ci --no-audit --no-fund >/dev/null; } && npm run build >/dev/null )
+
+  OLD_TREE="$(mktemp -d)"
+  rmdir "$OLD_TREE"
+  git -C "$REPO" worktree add --detach "$OLD_TREE" "$BUILD_REF" >/dev/null 2>&1
+  trap 'git -C "$REPO" worktree remove --force "$OLD_TREE" >/dev/null 2>&1 || true; rm -rf "$STAGE" "$OLD_TREE"' EXIT
+  ( cd "$OLD_TREE/$THEME_REL" && npm ci --no-audit --no-fund >/dev/null && npm run build >/dev/null )
+
+  NEW_BUILD="$HERE/amolnovin/public/build"
+  OLD_BUILD="$OLD_TREE/$THEME_REL/public/build"
+
+  if [ -d "$NEW_BUILD" ] && [ -d "$OLD_BUILD" ]; then
+    while IFS= read -r rel; do
+      [ -n "$rel" ] || continue
+      mkdir -p "$STAGE/root/public/build/$(dirname "$rel")"
+      cp "$NEW_BUILD/$rel" "$STAGE/root/public/build/$rel"
+      BUILT+=("public/build/$rel")
+    done < <(cd "$NEW_BUILD" && find . -type f | sed 's|^\./||' | while IFS= read -r rel; do
+      cmp -s "$NEW_BUILD/$rel" "$OLD_BUILD/$rel" || echo "$rel"
+    done)
+
+    while IFS= read -r rel; do
+      [ -n "$rel" ] || continue
+      DELETED+=("public/build/$rel")
+    done < <(cd "$OLD_BUILD" && find . -type f | sed 's|^\./||' | while IFS= read -r rel; do
+      [ -f "$NEW_BUILD/$rel" ] || echo "$rel"
+    done)
+  else
+    echo "warning: no public/build folder found — the patch carries the sources only" >&2
+  fi
+
+  echo "built assets: ${#BUILT[@]} changed, ${#DELETED[@]} removed"
+fi
 
 # hash every file and build the two manifests (inside the zip for offline installs, catalogue outside)
 python3 - "$STAGE" "$VERSION" "${BASE_VERSION}" "$NOTES" "$PKG_REL" <<'PY'
