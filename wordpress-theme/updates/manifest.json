@@ -2,6 +2,198 @@
   "schema": 1,
   "theme": "amolnovin",
   "name": "قالب وردپرس آمل نوین",
-  "generated": "2026-10-31T00:00:00Z",
-  "releases": []
+  "generated": "2026-11-01T04:19:20Z",
+  "releases": [
+    {
+      "version": "1.1.1",
+      "date": "2026-11-01",
+      "channel": "stable",
+      "requires": {
+        "php": "8.4",
+        "wp": "6.6",
+        "from": [
+          "1.0.0",
+          "1.1.0"
+        ]
+      },
+      "notes": "رفع خطاهای مهلک پنل بروزرسانی و صفحه‌ی فروشگاه، تاریخ‌های خالی فارسی، بررسی شورت‌کدها (قابل اعمال روی 1.0.0 و 1.1.0)",
+      "files": [
+        {
+          "path": "README.md",
+          "sha256": "96112917f541d73e4801911459bda05423fb13e80363948c668f2052ebc5eaa9"
+        },
+        {
+          "path": "app/Admin/Admin.php",
+          "sha256": "a8e5405d13e4a5561c443b503eca612cb5fab3645d6151343589254e3f1c3ad3"
+        },
+        {
+          "path": "app/Admin/DataEditor.php",
+          "sha256": "02f874da4e805bb217d21faf7863e3a8b4fa79e61156cdee171b44f72adc41e2"
+        },
+        {
+          "path": "app/Admin/Settings.php",
+          "sha256": "277ee2accda5b8e096f16d86b0e8407869ab580762632ebb6533372cac940c63"
+        },
+        {
+          "path": "app/Content/PageData.php",
+          "sha256": "f4e8edcff67d3ff8e8daf3ba5295aaf21094417ad37db021ae7ab962f394f78b"
+        },
+        {
+          "path": "app/Content/PostTypes.php",
+          "sha256": "b658b42bad0a97445ae0bf4a466629068a2bc8383e58dbd9ab757934405f1a8b"
+        },
+        {
+          "path": "app/Content/Repo.php",
+          "sha256": "8b4ebff3922fb919c6d02d8b178d877c04774dbbade1295560268fd8ab96af64"
+        },
+        {
+          "path": "app/Integrations/Captcha.php",
+          "sha256": "857e4274bf49c101e62d54f364e7dad506524206fef4f66409d3c2fdae19572e"
+        },
+        {
+          "path": "app/Integrations/MarketManager.php",
+          "sha256": "6aeba15443c6e0958adb1f6095f2f90f38d52f719daadcc6f3d3d3e8e47cfa90"
+        },
+        {
+          "path": "app/Integrations/Plugins.php",
+          "sha256": "03dfa9dd9ffdc206e12e93e16a11bceeed6dd34e9b7b55ecfca375f0d3c6116d"
+        },
+        {
+          "path": "app/Integrations/Security.php",
+          "sha256": "70c91a78c23f62738cc8efa2ed7f2cd46f602cfabb49c4df8f9b90281a596b39"
+        },
+        {
+          "path": "app/Integrations/Snippets.php",
+          "sha256": "3856b921e00ed250879320f4c086efffe89e5e8db66e4b4142ad77877cb21fa1"
+        },
+        {
+          "path": "app/Optimize/Seo.php",
+          "sha256": "e9a0e1391de44cbacac11679f535b68cfd7dc931351b14c819dbfd11ed13d6ea"
+        },
+        {
+          "path": "app/Optimize/Speed.php",
+          "sha256": "f825f5e56b7375a63e606de68e799d62bacd0deee220958827d1fb9421db642b"
+        },
+        {
+          "path": "app/Providers/ThemeServiceProvider.php",
+          "sha256": "90d8a1d9493eeb7d797a5b0fd027a5634318c437ac8fbe3106312279e01ed2d6"
+        },
+        {
+          "path": "app/Rest/Lead.php",
+          "sha256": "7176c4efaf7cc0f3bae7f509996d5f6f5f7d1acc3e962158d07f48f9e168f65b"
+        },
+        {
+          "path": "app/Seo/Feeds.php",
+          "sha256": "676997207d253ebd1618debab4f172f34fb1ac94667714860fdc711b1b2b76db"
+        },
+        {
+          "path": "app/Seo/Head.php",
+          "sha256": "2d9c588bf1af85193d8ce676477ecd3860ea2c3f36d830dbb1a59b93eaf82b27"
+        },
+        {
+          "path": "app/Seo/Schema.php",
+          "sha256": "7b44403edb703ffe86278fb51cc3ccf5f1b71eadd7207c7e723adc5e1b3a9883"
+        },
+        {
+          "path": "app/Support/Counters.php",
+          "sha256": "2ce8d3e5cc857b9973bf89e4c09205f968ec81e4ac4799d90715f69fbddf2566"
+        },
+        {
+          "path": "app/Support/Headers.php",
+          "sha256": "ee0eb18570e12ef9987fb4ed602dfa8d8654a6d14231d480f59e7ce339b6e007"
+        },
+        {
+          "path": "app/Support/Options.php",
+          "sha256": "7720f9b5b00598f3b28f6795c284ba8a419050a343713cd642c471f82df43ee2"
+        },
+        {
+          "path": "app/Support/Persian.php",
+          "sha256": "34f02f355792f36154fb2825fc6676acb67aeda6b6b47d00d761dafb66881101"
+        },
+        {
+          "path": "app/Updater/Patcher.php",
+          "sha256": "4426bca882ea1bc4d09bd8ad88a3aee0be2f387e85f79e375f7ed9ee19c4bfa5"
+        },
+        {
+          "path": "app/filters.php",
+          "sha256": "c5cef82a3513d45dad98e24fb34645f68728fca9649ddf8dcd7c56e51131dd90"
+        },
+        {
+          "path": "app/helpers.php",
+          "sha256": "6f3656a93490cbb2331c71eaadc7a6a95eec3701bafca4062b05f842c342d9b5"
+        },
+        {
+          "path": "app/setup.php",
+          "sha256": "9b8e85e72cc9a041f6ccc8fab124f8b462c361476b97515210ca8c9d37597c35"
+        },
+        {
+          "path": "package-lock.json",
+          "sha256": "930e8a8b8d2052c325f3e684f72da050f566464997c24364de8b393b6bb0b2e9"
+        },
+        {
+          "path": "package.json",
+          "sha256": "600aa7f6f2d6f92c2be44fd6b3271da764d4c8598b9c07c6e329f78b70e40251"
+        },
+        {
+          "path": "resources/css/06-wp.css",
+          "sha256": "5a878a3985433ed129bbc76a77b73bbf6ae00972e460755f1ee22ebd92a78051"
+        },
+        {
+          "path": "resources/js/admin.js",
+          "sha256": "a16af413a45f4a434aa4bbbddc2c62bb0a21e57c57b8dd6c3e4345f59efe0123"
+        },
+        {
+          "path": "resources/js/main.js",
+          "sha256": "696fe2c96f65dce8ea37d573836b62007327e51a2bba1e19f7aea3c25115ea85"
+        },
+        {
+          "path": "resources/views/components/lead-form.blade.php",
+          "sha256": "7f7613b929d6a6e8c9d9422feb168328251b8ea0aae5543e76af2f76fd8d4d3b"
+        },
+        {
+          "path": "resources/views/front-page.blade.php",
+          "sha256": "478f2e7ec32426d78114aa117b8db224144204734d6a0a0bd6f9b3c6e5468e1b"
+        },
+        {
+          "path": "resources/views/home.blade.php",
+          "sha256": "9e1f9e6b8d3df8ea6cb0ce0e613731aae4bab817edd6f0f93fe6b922f207ca26"
+        },
+        {
+          "path": "resources/views/layouts/app.blade.php",
+          "sha256": "4eb78046c97dc43aee2b80fc5475b7123f2884524a55bc319b5a6da2f38f5595"
+        },
+        {
+          "path": "resources/views/page-sections/html.blade.php",
+          "sha256": "d430bd04350da8c1d2f265dee6b660a8ebc35a0eb50d6a99c197daa9888fcfc7"
+        },
+        {
+          "path": "resources/views/page-sections/snippet.blade.php",
+          "sha256": "0cf57eb3832880a173bda3440176a7e2a9e239e59cef0d4314ef2220f3ac41bc"
+        },
+        {
+          "path": "resources/views/sections/footer.blade.php",
+          "sha256": "9570b20b0f6dfcc204d607dfd0b5a6a2a19d11f6c09ebc4ce34c539f3152c580"
+        },
+        {
+          "path": "resources/views/sections/header.blade.php",
+          "sha256": "91da9b0d3bed002c625442397a656e450d6c8c733d35c5c61882b87f25aa92ff"
+        },
+        {
+          "path": "resources/views/template-portfolio.blade.php",
+          "sha256": "4ef0a223b59792f76cbc38a4fafbb82c5530aef6367ebb7401e91e9070883bc8"
+        },
+        {
+          "path": "resources/views/template-store.blade.php",
+          "sha256": "90bde92287ddb9f2ff81b91114c3392ff3f19248f4a155b39b3e730a46cef5cf"
+        },
+        {
+          "path": "style.css",
+          "sha256": "b9048475cb1de005e3dde14f9a99d7653464637a6ab28b5e13c028e446f9b0de"
+        }
+      ],
+      "deleted": [],
+      "package": "patches/amolnovin-1.0.0-to-1.1.1.zip",
+      "sha256": "d643594b5952ed1ef9e54101257bc64e085f5f9d36e36f9880c224911d96e377"
+    }
+  ]
 }
