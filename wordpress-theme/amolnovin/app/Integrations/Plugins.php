@@ -10,7 +10,7 @@ namespace App\Integrations;
  */
 class Plugins
 {
-    /** Custom HTML Snippets — https://wordpress.org/plugins/custom-html-snippets/ (v3.0.0 in this project). */
+    /** Custom HTML Snippets — https://github.com/amolnovin/custom-html-snippets-plugin (v3.0.3 in this project). */
     public static function snippets(): bool
     {
         return defined('AmolNovin\\CHS\\VERSION')
@@ -69,7 +69,7 @@ class Plugins
                 'key' => 'snippets',
                 'name' => 'قطعه کدهای سفارشی (Custom HTML Snippets)',
                 'plugin' => 'custom-html-snippets',
-                'note' => 'شورت‌کد [my_snippet id="…"] در نوشته‌ها، برگه‌ها و بخش‌های قالب.',
+                'note' => 'شورت‌کد [my_snippet id="…"] در نوشته‌ها، برگه‌ها و بخش‌های قالب؛ CSS هر قطعه‌کد به ناحیه‌ی محتوا محدود می‌شود.',
             ],
             [
                 'key' => 'market_manager',

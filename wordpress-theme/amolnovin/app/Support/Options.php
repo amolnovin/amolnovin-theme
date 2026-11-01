@@ -112,6 +112,8 @@ class Options
             // ------------------------------------------------------------ افزونه‌ها و فروشگاه
             'integrations' => [
                 'snippets' => true,             // shortcodes of custom-html-snippets in content/excerpts
+                'snippets_scoped_css' => true,  // keep snippet CSS inside the content area (plugin 3.0.x)
+                'snippets_edit_bar' => true,    // plugin 3.0.3+ front-end «ویرایش قطعه‌کد» bar
                 'blog_intro_snippet' => 0,      // snippet shown above the blog index
                 'blog_outro_snippet' => 0,      // snippet shown below the blog index
                 'store_source' => 'auto',       // auto | plugin | theme

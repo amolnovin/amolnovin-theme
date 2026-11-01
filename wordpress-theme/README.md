@@ -54,7 +54,7 @@ cd ../html-template/amolnovin-generator && pip install jinja2 && python3 tools/e
 
 | افزونه | چه چیزی از قالب با آن هماهنگ می‌شود |
 |---|---|
-| **Custom HTML Snippets 3.0.0+** | شورت‌کد `[my_snippet id="…"]` در محتوا/خلاصه/بخش‌ها، بخش «قطعه کد سفارشی»، خلاصه‌ی بالای وبلاگ |
+| **Custom HTML Snippets 3.0.3+** | شورت‌کد `[my_snippet id="…"]` در محتوا/خلاصه/بخش‌ها، بخش «قطعه کد سفارشی»، خلاصه‌ی بالای وبلاگ؛ CSS هر قطعه‌کد به ناحیه‌ی محتوا محدود می‌شود؛ هماهنگی با iframe ایزوله و نوار ویرایش ۳.۰.۳ |
 | **WP Plugin Market Manager 1.2+** | صفحه‌ی `/wplm-store/` با `[wplm_store]` (محصول، سبد، پرداخت، نتیجه، حساب کاربری) |
 | **WP Math Captcha 1.3+** | کپچا در فرم مشاوره (سمت سرور در `/wp-json/amolnovin/v1/lead`)، دیدگاه‌ها، تازه‌سازی چالش |
 | **Novin Security Suite 1.3+** | باز ماندن REST فرم، جلوگیری از هدرهای امنیتی تکراری، نمایش وضعیت در پنل |

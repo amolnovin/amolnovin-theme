@@ -41,6 +41,23 @@
 .gallery-item { margin: 0; }
 .gallery-caption { font-size: .85rem; color: var(--text-3); }
 
+/* ---------------------------------------------------------------------------
+   Custom HTML Snippets 3.0.x
+   The plugin renders every snippet inside `.custom-snippet-container`; its CSS is scoped to that
+   container by the theme (تنظیمات → افزونه‌ها → «CSS قطعه‌کدها فقط در ناحیه‌ی محتوا»), so only these
+   layout guards are needed here.
+   --------------------------------------------------------------------------- */
+.custom-snippet-container { max-width: 100%; }
+.custom-snippet-container > :first-child { margin-top: 0; }
+.custom-snippet-container > :last-child { margin-bottom: 0; }
+.custom-snippet-container img, .custom-snippet-container svg, .custom-snippet-container video,
+.custom-snippet-container iframe, .custom-snippet-container canvas { max-width: 100%; }
+.custom-snippet-container table { width: 100%; border-collapse: collapse; }
+.custom-snippet-container pre { overflow-x: auto; }
+.custom-snippet-container .chs-isolated-frame, iframe.chs-isolated-frame { display: block; width: 100%; max-width: 100%; border: 0; background: transparent; }
+.chs-frontend-edit-bar { margin-block: 1rem !important; border-radius: 8px; }
+.chs-frontend-edit-bar a { text-decoration: none; }
+
 /* pagination (archives / blog index when there are more posts than one page) */
 .pagination { margin-top: 2.4rem; }
 .pagination .nav-links { display: flex; flex-wrap: wrap; gap: .5rem; justify-content: center; }

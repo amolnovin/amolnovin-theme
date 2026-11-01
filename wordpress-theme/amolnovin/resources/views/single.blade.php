@@ -10,7 +10,8 @@
     <div>
       <span class="eyebrow">{{ $p['cat'] }}</span>
       <h1>{{ $p['title'] }}</h1>
-      <p class="lead">{{ $p['excerpt'] }}</p>
+      @php($lead = \App\Content\Repo::lead($p))
+      @if ($lead !== '')<p class="lead">{{ $lead }}</p>@endif
       <div class="page-hero__meta"><span>@icon('user') {{ $site['short'] }}</span><span>@icon('calendar-days') <time datetime="{{ $p['date'] }}">{{ $p['jdate'] }}</time></span><span>@icon('clock') {{ $p['read'] }} دقیقه مطالعه</span></div>
     </div>
   </div>

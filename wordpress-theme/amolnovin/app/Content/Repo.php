@@ -213,6 +213,41 @@ class Repo
         return $e;
     }
 
+    /**
+     * The lead (خلاصه) of a post: what WordPress itself calls the excerpt (چکیده) — the manual excerpt when the
+     * editor wrote one, otherwise the generated `wp_trim_excerpt` — with the stored entity value as last resort.
+     * Shortcodes are stripped, so a snippet embedded in the excerpt never leaks markup into the headline block.
+     */
+    public static function lead(array $e): string
+    {
+        $text = '';
+        $id = (int) ($e['_id'] ?? 0);
+
+        if ($id > 0 && function_exists('get_the_excerpt')) {
+            $text = (string) get_the_excerpt($id);
+        }
+
+        $text = self::plain($text);
+
+        if ($text === '') {
+            $text = self::plain((string) ($e['excerpt'] ?? ''));
+        }
+
+        return $text;
+    }
+
+    /** Strip tags/shortcodes and collapse whitespace (a one-line lead). */
+    protected static function plain(string $text): string
+    {
+        if ($text === '') {
+            return '';
+        }
+
+        $text = function_exists('strip_shortcodes') ? strip_shortcodes($text) : $text;
+
+        return trim((string) preg_replace('/\s+/u', ' ', wp_strip_all_tags($text)));
+    }
+
     // ---------------------------------------------------------------- images
     /** URL of an entity image: featured image of the post when set, otherwise the theme image `img/{dir}/{name}{suffix}.webp`. */
     public static function image(array $e, string $dir, string $suffix = '', string $key = 'img'): string

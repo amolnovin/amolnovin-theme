@@ -413,7 +413,9 @@ class Settings
         echo '<input type="hidden" name="action" value="amol_save_options"><input type="hidden" name="group" value="integrations"><input type="hidden" name="tab" value="integrations">';
         echo '<table class="form-table" role="presentation"><tbody>';
 
-        self::checkbox('integrations', 'snippets', 'پشتیبانی از شورت‌کد قطعه کدها', 'شورت‌کد <code>[my_snippet id="…"]</code> در نوشته‌ها، برگه‌ها، خلاصه‌ها و بخش «قطعه کد سفارشی» کار می‌کند.');
+        self::checkbox('integrations', 'snippets', 'پشتیبانی از شورت‌کد قطعه کدها', 'شورت‌کد <code>[my_snippet id="…"]</code> در نوشته‌ها، برگه‌ها، خلاصه‌ها و بخش «قطعه کد سفارشی» کار می‌کند (افزونه‌ی ۳.۰.x).');
+        self::checkbox('integrations', 'snippets_scoped_css', 'CSS قطعه‌کدها فقط در ناحیه‌ی محتوا', 'استایل هر قطعه‌کد به همان قطعه‌کد محدود می‌شود: قاعده‌هایی مثل <code>body</code>، <code>h2</code>، <code>.prose h2</code> و همچنین حالت «تحویل فایلی» و «سراسری» به داخل <code>.custom-snippet-container</code> منتقل می‌شوند تا هدر، منو، فوتر و کارت‌های سایت تغییر نکنند. <code>@media</code> بازنویسی می‌شود و <code>@keyframes</code>/<code>@font-face</code> دست‌نخورده می‌ماند.');
+        self::checkbox('integrations', 'snippets_edit_bar', 'نوار ویرایش سریع قطعه‌کد (۳.۰.۳+)', 'نوار بالای هر قطعه‌کد برای کاربران واردشده‌ای که اجازه‌ی ویرایش دارند نمایش داده می‌شود؛ با خاموش‌کردن آن، قطعه‌کد فقط برای بازدیدکننده‌ها یکسان دیده می‌شود (فیلتر <code>chs_show_frontend_edit_box</code>).');
         self::select('integrations', 'blog_intro_snippet', 'قطعه کد بالای فهرست وبلاگ', self::snippetChoices());
         self::select('integrations', 'blog_outro_snippet', 'قطعه کد پایین فهرست وبلاگ', self::snippetChoices());
         self::select('integrations', 'store_source', 'منبع صفحه‌ی /wplm-store/', [

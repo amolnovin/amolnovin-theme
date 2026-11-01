@@ -124,6 +124,13 @@ input[type="range"]::-moz-range-thumb { width: 18px; height: 18px; border-radius
 
 /* ---------- blog / article ---------- */
 .article-head { max-width: 860px; }
+/* single post: the headline block and the post body take 95% of the content width */
+body.single-post .page-hero__grid--solo.article-head { grid-template-columns: minmax(0, 1fr); max-width: 95%; }
+body.single-post [data-article] .article-grid > article { width: 95%; margin-inline: auto; }
+@media (max-width: 1000px) {
+  body.single-post .page-hero__grid--solo.article-head { max-width: 100%; }
+  body.single-post [data-article] .article-grid > article { width: 100%; }
+}
 .article-grid { display: grid; grid-template-columns: minmax(0, 1fr) 310px; gap: clamp(1.5rem, 4vw, 3.5rem); align-items: start; }
 .article-cover { border-radius: var(--r-xl); overflow: hidden; margin-bottom: 2rem; box-shadow: var(--shadow-md); border: 1px solid var(--line); }
 .article-aside { position: sticky; top: calc(var(--header-h) + 18px); display: grid; gap: 1rem; }

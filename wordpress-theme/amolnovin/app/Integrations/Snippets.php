@@ -5,12 +5,14 @@ namespace App\Integrations;
 use App\Support\Options;
 
 /**
- * Custom HTML Snippets (آمل نوین) integration.
+ * Custom HTML Snippets (آمل نوین) integration — plugin 3.0.x.
  *
  * The plugin renders a snippet with `[my_snippet id="123"]`; the theme
  *   • keeps that shortcode working inside post/page content, excerpts and page sections,
  *   • offers a native «snippet» page section (Data editor → «قطعه کد سفارشی»),
- *   • lets the blog archive show an intro/outro snippet (تنظیمات قالب → افزونه‌ها).
+ *   • lets the blog archive show an intro/outro snippet (تنظیمات قالب → افزونه‌ها),
+ *   • keeps the snippet CSS inside the content area ({@see SnippetCss}) and can hide the
+ *     plugin's front-end edit bar (3.0.3+) for everyone but the theme's own admin styling.
  */
 class Snippets
 {
@@ -31,6 +33,13 @@ class Snippets
 
         // the plugin renders its own assets; make sure the theme never strips its shortcode from the loop
         add_filter('widget_text', 'do_shortcode', 11, 1);
+
+        // «تحویل فایلی»/«اسکوپ»/«نوار ویرایش» — 3.0.x additions
+        SnippetCss::boot();
+
+        if (! Options::on('integrations', 'snippets_edit_bar')) {
+            add_filter('chs_show_frontend_edit_box', '__return_false');
+        }
     }
 
     /**
@@ -66,7 +75,8 @@ class Snippets
             return '';
         }
 
-        return is_string($html) ? $html : '';
+        // a snippet's own CSS must stay inside the content area, never reach the header/footer
+        return is_string($html) ? SnippetCss::scope($html, true) : '';
     }
 
     /** Render a snippet chosen in the settings panel (0 = nothing). */

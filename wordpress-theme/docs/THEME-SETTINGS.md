@@ -81,7 +81,7 @@
 
 | افزونه | تشخیص | رفتار قالب |
 |---|---|---|
-| **Custom HTML Snippets 3.0.0** | `AmolNovin\CHS\VERSION` / `custom_snippet` / `my_snippet` | شورت‌کد در محتوا، خلاصه‌ها و بخش «قطعه کد سفارشی»؛ انتخاب قطعه‌کد برای بالای وبلاگ و پایین وبلاگ؛ `do_shortcode` در بخش HTML |
+| **Custom HTML Snippets 3.0.3** | `AmolNovin\CHS\VERSION` / `custom_snippet` / `my_snippet` | شورت‌کد در محتوا، خلاصه‌ها و بخش «قطعه کد سفارشی»؛ انتخاب قطعه‌کد برای بالای وبلاگ و پایین وبلاگ؛ `do_shortcode` در بخش HTML؛ محدودسازی CSS قطعه‌کد به `.custom-snippet-container` (`snippets_scoped_css`)؛ نمایش/پنهان‌کردن نوار ویرایش ۳.۰.۳ (`snippets_edit_bar`) |
 | **WP Plugin Market Manager** | `WPLM_VERSION` / `WPLM\Plugin` / `wplm_store` | صفحه‌ی `/wplm-store/` شورت‌کد `[wplm_store]` را رندر می‌کند (محصول، سبد، پرداخت، حساب کاربری)؛ دکمه‌ی «اتصال صفحه‌ی فروشگاه» گزینه‌های افزونه را به همین برگه وصل می‌کند؛ CPT داخلی قالب در این حالت از منو پنهان می‌شود |
 | **WP Math Captcha 1.x** | `WP_MC_Captcha` | کپچا در فرم مشاوره + بررسی سمت سرور؛ دیدگاه‌ها به‌صورت خودکار |
 | **Novin Security Suite 1.3.x** | `NSH_VERSION` / `nsh()` | باز نگه‌داشتن مسیر REST عمومی وقتی «الزام ورود برای REST» روشن است؛ جلوگیری از ارسال دوباره‌ی هدرهای امنیتی؛ نمایش وضعیت در پنل |
