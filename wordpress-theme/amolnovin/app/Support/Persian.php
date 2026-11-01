@@ -156,10 +156,23 @@ class Persian
     /** "2026-10-15" -> "23 مهر 1405" (Latin digits; faHtml converts them on output) */
     public static function jdate(string $iso): string
     {
-        [$y, $m, $d] = array_map('intval', explode('-', substr($iso, 0, 10)));
-        [$jy, $jm, $jd] = self::g2j($y, $m, $d);
+        // drafts, auto-drafts and imported rows may carry an empty / zero date ("0000-00-00")
+        if (! preg_match('/^(\d{4})-(\d{2})-(\d{2})$/', substr(trim($iso), 0, 10), $m)) {
+            return '';
+        }
 
-        return $jd . ' ' . self::MONTHS[$jm - 1] . ' ' . $jy;
+        $y = (int) $m[1];
+        $mo = (int) $m[2];
+        $d = (int) $m[3];
+
+        if ($y < 1900 || $y > 2200 || $mo < 1 || $mo > 12 || $d < 1 || $d > 31) {
+            return '';
+        }
+
+        [$jy, $jm, $jd] = self::g2j($y, $mo, $d);
+        $month = self::MONTHS[$jm - 1] ?? '';
+
+        return $month === '' ? '' : $jd . ' ' . $month . ' ' . $jy;
     }
 
     public static function jyear(): int

@@ -206,7 +206,7 @@ class Repo
     public static function shapePost(array $e): array
     {
         $body = (string) ($e['body'] ?? '');
-        $e['jdate'] = Persian::jdate($e['date']);
+        $e['jdate'] = Persian::jdate((string) ($e['date'] ?? ''));
         $e['read'] = Persian::readMinutes($body);
         $e['words'] = Persian::wordCount($body);
 
