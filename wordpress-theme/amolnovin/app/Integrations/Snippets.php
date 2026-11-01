@@ -54,7 +54,17 @@ class Snippets
         }
 
         $shortcode = '[my_snippet ' . self::attributes($args) . ']';
-        $html = do_shortcode($shortcode);
+
+        try {
+            $html = do_shortcode($shortcode);
+        } catch (\Throwable $e) {
+            // a broken snippet must not break the page that shows it
+            if (defined('WP_DEBUG') && WP_DEBUG) {
+                error_log('AmolNovin snippet ' . $id . ' failed: ' . $e->getMessage()); // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
+            }
+
+            return '';
+        }
 
         return is_string($html) ? $html : '';
     }

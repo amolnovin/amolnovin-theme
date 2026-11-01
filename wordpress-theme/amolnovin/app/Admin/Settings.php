@@ -142,6 +142,11 @@ class Settings
             .amol-panel .amol-code{font-family:Consolas,Menlo,monospace;font-size:12px;width:100%}
             .amol-panel .amol-inline{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
             .amol-panel table.amol-status td,.amol-panel table.amol-status th{padding:8px 10px}
+            .amol-panel .amol-checklist{list-style:none;margin:8px 0 0;padding:0;display:grid;gap:8px}
+            .amol-panel .amol-checklist__item{display:flex;gap:8px;align-items:flex-start;margin:0}
+            .amol-panel .amol-checklist__icon{flex:0 0 20px;height:20px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-weight:700;font-size:12px;background:#f0f0f1;color:#50575e}
+            .amol-panel .amol-checklist__item--ok .amol-checklist__icon{background:#d1f0d8;color:#0a5c2a}
+            .amol-panel .amol-checklist__item--warn .amol-checklist__icon{background:#fcf3cf;color:#6b5b00}
         </style>';
     }
 
@@ -175,7 +180,8 @@ class Settings
         self::row($label, $control, $desc);
     }
 
-    protected static function input(string $group, string $key, string $label, string $type = 'text', string $desc = '', array $attrs = []): void
+    /** @param array<string,string|int> $attrs */
+    protected static function input(string $group, string $key, string $label, string $desc = '', array $attrs = [], string $type = 'text'): void
     {
         $id = self::id($group, $key);
         $extra = '';
@@ -198,7 +204,7 @@ class Settings
             $attrs['max'] = $max;
         }
 
-        self::input($group, $key, $label, 'number', $desc, $attrs);
+        self::input($group, $key, $label, $desc, $attrs, 'number');
     }
 
     protected static function textarea(string $group, string $key, string $label, string $desc = '', int $rows = 4, string $class = 'large-text', ?string $value = null): void
@@ -461,6 +467,32 @@ class Settings
         }
 
         echo '</div>';
+
+        // ---- shortcode diagnostics (a plugin can be active yet register nothing)
+        $checks = [];
+
+        if (Plugins::marketManager() && ! shortcode_exists('wplm_store')) {
+            $checks[] = ['warn', 'افزونه‌ی فروشگاه فعال است ولی شورت‌کد <code>[wplm_store]</code> ثبت نشده؛ نسخه‌ی افزونه را بازنصب کنید. تا آن زمان قالب کارت‌های خودش را نشان می‌دهد.'];
+        }
+
+        if (Plugins::marketManager() && shortcode_exists('wplm_store')) {
+            $checks[] = ['ok', 'شورت‌کد <code>[wplm_store]</code> در دسترس است. اگر صفحه هنوز خطا بدهد، پیام خطا فقط برای مدیر نمایش داده می‌شود و بازدیدکننده‌ها کارت‌های قالب را می‌بینند.'];
+        }
+
+        if (Plugins::snippets() && ! shortcode_exists('my_snippet')) {
+            $checks[] = ['warn', 'افزونه‌ی قطعه کدها فعال است ولی شورت‌کد <code>[my_snippet]</code> ثبت نشده است.'];
+        }
+
+        if ($checks) {
+            echo '<div class="amol-card"><h2>بررسی شورت‌کدها</h2><ul class="amol-checklist">';
+
+            foreach ($checks as [$kind, $text]) {
+                $icon = $kind === 'ok' ? '✓' : '!';
+                echo '<li class="amol-checklist__item amol-checklist__item--' . esc_attr($kind) . '"><span class="amol-checklist__icon">' . esc_html($icon) . '</span><span>' . $text . '</span></li>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- text built with esc_html()/static markup.
+            }
+
+            echo '</ul></div>';
+        }
 
         // ---- security state
         if (Plugins::security()) {

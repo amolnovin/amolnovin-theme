@@ -13,6 +13,9 @@ use App\Support\Options;
  */
 class MarketManager
 {
+    /** Last error of the plugin's shortcode (empty when it rendered fine). */
+    protected static string $error = '';
+
     public static function active(): bool
     {
         return self::usesPlugin();
@@ -40,16 +43,53 @@ class MarketManager
         });
     }
 
-    /** Render the plugin store (or an informative note for editors when the plugin is missing). */
+    /**
+     * Render the plugin store.
+     *
+     * A broken or half-installed plugin must never take the page down (its shortcode can throw an Error or a
+     * TypeError), so the output is guarded: on failure this returns '' and the caller falls back to the theme's
+     * own product cards, while {@see self::error()} keeps the message for the settings panel and admins.
+     */
     public static function render(string $shortcode = 'wplm_store'): string
     {
+        self::$error = '';
+
         if (! self::usesPlugin() || ! shortcode_exists($shortcode)) {
             return '';
         }
 
-        $html = do_shortcode('[' . $shortcode . ']');
+        try {
+            $html = do_shortcode('[' . $shortcode . ']');
+        } catch (\Throwable $e) {
+            self::fail($e);
 
-        return is_string($html) ? $html : '';
+            return '';
+        }
+
+        if (! is_string($html) || trim($html) === '') {
+            if (! is_string($html)) {
+                self::fail(new \RuntimeException('shortcode returned ' . gettype($html)));
+            }
+
+            return '';
+        }
+
+        return $html;
+    }
+
+    /** Message of the last failed shortcode render ('' when nothing failed). */
+    public static function error(): string
+    {
+        return self::$error;
+    }
+
+    protected static function fail(\Throwable $e): void
+    {
+        self::$error = $e->getMessage();
+
+        if (defined('WP_DEBUG') && WP_DEBUG) {
+            error_log('AmolNovin market-manager shortcode failed: ' . $e->getMessage() . ' in ' . $e->getFile() . ':' . $e->getLine()); // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
+        }
     }
 
     /** URL of the store page: the plugin's configured page, else the theme's /wplm-store/ page. */
