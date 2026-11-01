@@ -2,7 +2,7 @@
   "schema": 1,
   "theme": "amolnovin",
   "name": "قالب وردپرس آمل نوین",
-  "generated": "2026-11-01T12:41:28Z",
+  "generated": "2026-11-01T12:55:47Z",
   "releases": [
     {
       "version": "1.1.1",
@@ -270,6 +270,87 @@
       ],
       "package": "patches/amolnovin-1.1.1-to-1.2.0.zip",
       "sha256": "6927da616c10ddb1113514c7428e342c3fd7c7d8e6e33b6b3e4b11b62f5aec94"
+    },
+    {
+      "version": "1.2.1",
+      "date": "2026-11-01",
+      "channel": "stable",
+      "requires": {
+        "php": "8.4",
+        "wp": "6.6",
+        "from": [
+          "1.1.1",
+          "1.2.0"
+        ]
+      },
+      "notes": "رفع خطای «ساخت پوشه‌ی پشتیبان ناموفق بود» در بروزرسانی با پچ + هماهنگی با Custom HTML Snippets 3.0.3 و عرض ۹۵٪ تک‌نوشته (شامل فایل‌های build)",
+      "files": [
+        {
+          "path": "app/Admin/Settings.php",
+          "sha256": "040191850d9122fbbe381407203f6721d82a19dd549e9a9b02856443d3f11154"
+        },
+        {
+          "path": "app/Content/Repo.php",
+          "sha256": "a8a3f2959fe4de3f6a39a5a6a7e9138ba0862aac8114a2c74a15fced183c4378"
+        },
+        {
+          "path": "app/Integrations/Plugins.php",
+          "sha256": "ca7d686dee4735cde6b6d7a4a81f9dd1bb7135fde6a82e110fce091f904d3cee"
+        },
+        {
+          "path": "app/Integrations/SnippetCss.php",
+          "sha256": "09434dcf328905ba2cdb51fcc5fdd526253d1632831d5467afea45344b41c224"
+        },
+        {
+          "path": "app/Integrations/Snippets.php",
+          "sha256": "993a62157c80c75463eacae6df87fc0ea0a0155ec8e32d36c6c200043ed58301"
+        },
+        {
+          "path": "app/Support/Options.php",
+          "sha256": "d11400e1a1807f26f6a7a2f33d014937a7e257de38e10a3c005c12b58bdc569d"
+        },
+        {
+          "path": "app/Updater/Patcher.php",
+          "sha256": "ceb0bed81cadbdb80b951a3fae6f6b1c45152ecc0b7d596f7823fe67a89b3773"
+        },
+        {
+          "path": "package-lock.json",
+          "sha256": "b18ec07df726efb3d2289adfa8ed85bba43f5bf528fbf86522ba7183c96707cf"
+        },
+        {
+          "path": "package.json",
+          "sha256": "ca85f313f9565746b322c49dcd1edd056d97f91c0bb017a54fae256fdfc0ede4"
+        },
+        {
+          "path": "public/build/assets/app-C-BpqBcs.css",
+          "sha256": "a61d8907f78316d7c2727fd73525cf6dc034f40ee5bba6199d4068956b4e37dc"
+        },
+        {
+          "path": "public/build/manifest.json",
+          "sha256": "d86ff879b7050c4d178c55921306d658c1d16de9407d7d367e334b49d645a2fc"
+        },
+        {
+          "path": "resources/css/05-pages.css",
+          "sha256": "abd8c09a3bf3702a2532d498799e27f27087bafc93b8fdcd126a70ce494c9ac7"
+        },
+        {
+          "path": "resources/css/06-wp.css",
+          "sha256": "7edbe7ccdb7d2988b195332ffc2653815241c75b5fa1bda5fc0facf37087d769"
+        },
+        {
+          "path": "resources/views/single.blade.php",
+          "sha256": "1abae9c292a0158a80e3ee7b816acff7a254e0ad076b3387261aa4563aeebba1"
+        },
+        {
+          "path": "style.css",
+          "sha256": "595982f516ca1008faa11f920a898c87cf06210af22d7dcb7a4b0b1cc6986ea1"
+        }
+      ],
+      "deleted": [
+        "public/build/assets/app-BbPfL5V3.css"
+      ],
+      "package": "patches/amolnovin-1.1.1-to-1.2.1.zip",
+      "sha256": "22b1556b956427d52ffd7100f22d159f0491e75764798f25be07e533dba371dd"
     }
   ]
 }
