@@ -85,6 +85,25 @@ jobs:
               "wordpress-theme/dist/$ASSET"
           fi
 
+      # the patch of this version lives in the repo (updates/patches/<base>-to-<version>.zip);
+      # attach it to the release so the panel's «بروزرسانی قالب» can download it straight from GitHub
+      - name: Publish patch
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TAG: ${{ steps.meta.outputs.tag }}
+          VERSION: ${{ steps.meta.outputs.version }}
+        run: |
+          shopt -s nullglob
+          patches=(wordpress-theme/updates/patches/amolnovin-*-to-"$VERSION".zip)
+          if [ ${#patches[@]} -eq 0 ]; then
+            echo "no patch registered for $VERSION"
+            exit 0
+          fi
+          for zip in "${patches[@]}"; do
+            echo "::notice::attaching $(basename "$zip") to $TAG"
+            gh release upload "$TAG" "$zip" --clobber
+          done
+
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
