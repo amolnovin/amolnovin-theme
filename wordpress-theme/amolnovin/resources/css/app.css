@@ -6,3 +6,5 @@
 @import "./05-pages.css";
 /* WordPress-only additions (core classes, admin bar, comments, pagination) — never touches existing selectors */
 @import "./06-wp.css";
+/* no horizontal page scroll on desktop and mobile (root clip + overflow guards) — loaded last */
+@import "./07-overflow.css";

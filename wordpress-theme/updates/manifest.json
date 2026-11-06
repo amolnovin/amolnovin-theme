@@ -2,7 +2,7 @@
   "schema": 1,
   "theme": "amolnovin",
   "name": "قالب وردپرس آمل نوین",
-  "generated": "2026-11-01T12:55:47Z",
+  "generated": "2026-11-06T04:32:12Z",
   "releases": [
     {
       "version": "1.1.1",
@@ -351,6 +351,105 @@
       ],
       "package": "patches/amolnovin-1.1.1-to-1.2.1.zip",
       "sha256": "22b1556b956427d52ffd7100f22d159f0491e75764798f25be07e533dba371dd"
+    },
+    {
+      "version": "1.2.2",
+      "date": "2026-11-06",
+      "channel": "stable",
+      "requires": {
+        "php": "8.4",
+        "wp": "6.6",
+        "from": [
+          "1.1.1",
+          "1.2.0",
+          "1.2.1"
+        ]
+      },
+      "notes": "حذف کامل اسکرول افقی صفحه در دسکتاپ و موبایل: overflow-x: clip روی ریشه (هدر چسبان سالم می‌ماند)، محافظ‌های سرریز برای تصویر/ویدیو/آی‌فریم/جدول/کد و فرزندان گرید، و قرار گرفتن جدول‌های ویرایشگر داخل .table-wrap",
+      "files": [
+        {
+          "path": "app/Admin/Settings.php",
+          "sha256": "040191850d9122fbbe381407203f6721d82a19dd549e9a9b02856443d3f11154"
+        },
+        {
+          "path": "app/Content/Repo.php",
+          "sha256": "a8a3f2959fe4de3f6a39a5a6a7e9138ba0862aac8114a2c74a15fced183c4378"
+        },
+        {
+          "path": "app/Integrations/Plugins.php",
+          "sha256": "ca7d686dee4735cde6b6d7a4a81f9dd1bb7135fde6a82e110fce091f904d3cee"
+        },
+        {
+          "path": "app/Integrations/SnippetCss.php",
+          "sha256": "09434dcf328905ba2cdb51fcc5fdd526253d1632831d5467afea45344b41c224"
+        },
+        {
+          "path": "app/Integrations/Snippets.php",
+          "sha256": "993a62157c80c75463eacae6df87fc0ea0a0155ec8e32d36c6c200043ed58301"
+        },
+        {
+          "path": "app/Support/Html.php",
+          "sha256": "99e800b4a9b5c2e470cc829b25460433ccffc9d18ac37d59cccb947fba535331"
+        },
+        {
+          "path": "app/Support/Options.php",
+          "sha256": "d11400e1a1807f26f6a7a2f33d014937a7e257de38e10a3c005c12b58bdc569d"
+        },
+        {
+          "path": "app/Updater/Patcher.php",
+          "sha256": "ceb0bed81cadbdb80b951a3fae6f6b1c45152ecc0b7d596f7823fe67a89b3773"
+        },
+        {
+          "path": "package-lock.json",
+          "sha256": "8158a1110440d92befcd605db1473689867ffda367eb18b78ae26b83130bd12c"
+        },
+        {
+          "path": "package.json",
+          "sha256": "2311fdda0cf67cd1e31739554e3d797aa4dcd5ca838bb53836b93bc4d000cbb2"
+        },
+        {
+          "path": "public/build/assets/app-BaSu_Wer.css",
+          "sha256": "7504588b3e2a00783a691dddd8edd0c3f012c58d55546e41e003db28f6a8ca9f"
+        },
+        {
+          "path": "public/build/manifest.json",
+          "sha256": "7a879815c143bdfb20cabd8035657f3b1f30174196a4bea43b838797f578ed1d"
+        },
+        {
+          "path": "resources/css/01-base.css",
+          "sha256": "127c3d7566f3361ae1efd318a0435cb4afc0da89fe6089101cfd16e297df1f86"
+        },
+        {
+          "path": "resources/css/05-pages.css",
+          "sha256": "abd8c09a3bf3702a2532d498799e27f27087bafc93b8fdcd126a70ce494c9ac7"
+        },
+        {
+          "path": "resources/css/06-wp.css",
+          "sha256": "5f2353bf2d97bfabc486111860589e7ada02dc3f9ef538f87009b743506ab666"
+        },
+        {
+          "path": "resources/css/07-overflow.css",
+          "sha256": "aed991acf32c7ab83171d50d1a2215bef86da950fffc5c67a833e2e0a20d6760"
+        },
+        {
+          "path": "resources/css/app.css",
+          "sha256": "3e9e5392ad144e927ceb842367207c58ce577b44003fc89c9e054f1e417f2284"
+        },
+        {
+          "path": "resources/views/single.blade.php",
+          "sha256": "1abae9c292a0158a80e3ee7b816acff7a254e0ad076b3387261aa4563aeebba1"
+        },
+        {
+          "path": "style.css",
+          "sha256": "0e439fec3c2e3ff429e64500d475e06cd37998fcb81fa473ea675f3a97137530"
+        }
+      ],
+      "deleted": [
+        "public/build/assets/app-BbPfL5V3.css",
+        "public/build/assets/app-C-BpqBcs.css"
+      ],
+      "package": "patches/amolnovin-1.1.1-to-1.2.2.zip",
+      "sha256": "e53750c22738d114152adb9b40e2a635bb3a60bbd7266d7e92cf652dd55254dc"
     }
   ]
 }

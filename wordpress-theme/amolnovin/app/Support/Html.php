@@ -67,8 +67,50 @@ class Html
         }
 
         $html = preg_replace_callback('/href="@(\/[^"]*)"/', fn ($m) => 'href="' . esc_url(self::url($m[1])) . '"', $html);
+        $html = (string) preg_replace_callback('/src="@asset:([^"]*)"/', fn ($m) => 'src="' . esc_url(self::asset($m[1])) . '"', $html);
 
-        return preg_replace_callback('/src="@asset:([^"]*)"/', fn ($m) => 'src="' . esc_url(self::asset($m[1])) . '"', $html);
+        return self::wrapTables($html);
+    }
+
+    /**
+     * Put a table written in the editor into the theme's `.table-wrap` scroll container.
+     *
+     * A wide table (7 columns from Word, a pricing matrix …) is wider than a phone screen; without the
+     * wrapper it widens the whole document and the page starts panning left/right. Tables that are already
+     * wrapped (the theme's own sections and the imported content use `<div class="table-wrap">`) are left
+     * untouched.
+     */
+    public static function wrapTables(string $html): string
+    {
+        if ($html === '' || stripos($html, '<table') === false) {
+            return $html;
+        }
+
+        $out = '';
+        $offset = 0;
+
+        while (preg_match('~<table\b[^>]*>~i', $html, $m, PREG_OFFSET_CAPTURE, $offset)) {
+            $start = (int) $m[0][1];
+            $close = stripos($html, '</table>', $start + strlen($m[0][0]));
+
+            if ($close === false) {
+                $out .= substr($html, $offset); // unbalanced markup: hand the rest back untouched
+
+                return $out;
+            }
+
+            $close += 8; // strlen('</table>')
+            $out .= substr($html, $offset, $start - $offset);
+
+            $before = substr($html, max(0, $start - 200), min(200, $start));
+            $wrapped = (bool) preg_match('~<div[^>]+class="[^"]*\btable-wrap\b[^"]*"[^>]*>\s*$~i', $before);
+
+            $table = substr($html, $start, $close - $start);
+            $out .= $wrapped ? $table : '<div class="table-wrap">' . $table . '</div>';
+            $offset = $close;
+        }
+
+        return $out . substr($html, $offset);
     }
 
     /** Replace the {SITE_URL} token used by exported schema data. */
