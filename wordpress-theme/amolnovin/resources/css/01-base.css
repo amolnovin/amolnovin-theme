@@ -124,7 +124,7 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
-  overflow-x: hidden;
+  /* horizontal overflow is locked in 07-overflow.css (overflow-x: clip keeps position:sticky working) */
   transition: background-color .3s var(--ease), color .3s var(--ease);
 }
 img, svg, video, canvas { max-width: 100%; height: auto; display: block; }

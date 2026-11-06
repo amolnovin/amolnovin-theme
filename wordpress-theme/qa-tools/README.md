@@ -20,5 +20,6 @@ pip install playwright lxml pillow html5lib && python -m playwright install chro
 | `QA_BASE=$WP QA_SITE_DIR=/path/to/wordpress QA_ADMIN_PASS=... python3 wp_admin_test.py` | پیشخوان: ورود، ویرایشگر ساختاری، ذخیره با ویرایشگر بلوک، افزودن بخش، نمایش در سایت |
 | `php snippet-css-scope-test.php` | محدودسازی CSS قطعه‌کدهای افزونه (Custom HTML Snippets 3.0.x) به `.custom-snippet-container` — بدون نیاز به وردپرس |
 | `php patch-backup-dir-test.php` | ساخت پوشه‌ی پشتیبان بروزرسانی (`uploads/amolnovin-backups`)، حالت‌های جایگزین و پیام خطای «ساخت پوشه‌ی پشتیبان ناموفق بود» — بدون نیاز به وردپرس |
+| `php table-wrap-test.php` | قرار گرفتن جدول‌های ویرایشگر داخل `.table-wrap` (جلوگیری از اسکرول افقی صفحه) — بدون نیاز به وردپرس |
 
 `router.php` روتر سرور داخلی PHP برای پیوندهای یکتا است: `WP_ROOT=/path/to/wordpress php -S 0.0.0.0:8081 router.php`.

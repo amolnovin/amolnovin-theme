@@ -58,6 +58,14 @@
 .chs-frontend-edit-bar { margin-block: 1rem !important; border-radius: 8px; }
 .chs-frontend-edit-bar a { text-decoration: none; }
 
+/* tables written in the editor: Html::wrapTables() puts them inside .table-wrap so they scroll
+   inside their own box instead of widening the page — they just need readable cells now */
+.table-wrap > table:not(.table) { width: 100%; font-size: .96rem; }
+.table-wrap > table:not(.table) th,
+.table-wrap > table:not(.table) td { padding: .7rem .9rem; border-bottom: 1px solid var(--line); text-align: start; vertical-align: top; line-height: 1.8; }
+.table-wrap > table:not(.table) thead th { background: var(--surface-2); font-weight: 800; }
+.table-wrap > table:not(.table) tbody tr:last-child > * { border-bottom: 0; }
+
 /* pagination (archives / blog index when there are more posts than one page) */
 .pagination { margin-top: 2.4rem; }
 .pagination .nav-links { display: flex; flex-wrap: wrap; gap: .5rem; justify-content: center; }

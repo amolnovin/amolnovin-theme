@@ -1,0 +1,141 @@
+/* ==========================================================================
+   07 · No horizontal page scroll (desktop + mobile)
+   --------------------------------------------------------------------------
+   The page must never pan left/right: everything that is wider than the viewport (wide tables,
+   long URLs, off-canvas panels, rotated hero art, the mega menu, third-party widgets …) is clipped
+   at the root instead of turning the whole document into a horizontally scrollable area.
+
+   Why `overflow-x: clip` and not `hidden`:
+   `hidden` turns <body> into a scroll container, and a `position: sticky` header inside a scroll
+   container stops sticking to the viewport. `clip` cuts the paint without creating a scroller, so
+   the sticky header, the smooth anchor scrolling and the internal scrollers (tables, sub-nav,
+   filter lists, code blocks) all keep working. Older browsers fall back to `hidden` below.
+   ========================================================================== */
+
+html {
+  overflow-x: clip;
+  /* iOS: no rubber-band panning to the sides */
+  overscroll-behavior-x: none;
+}
+
+body {
+  overflow-x: clip;
+  max-width: 100%;
+  /* long English words / URLs in Persian sentences wrap instead of widening the page */
+  overflow-wrap: break-word;
+}
+
+@supports not (overflow: clip) {
+  html,
+  body {
+    overflow-x: hidden;
+  }
+}
+
+/* ---------- nothing may be wider than its column ---------- */
+iframe,
+embed,
+object,
+video,
+canvas,
+svg,
+table,
+pre {
+  max-width: 100%;
+}
+
+.prose img,
+.prose svg,
+.prose video,
+.prose iframe,
+.prose embed,
+.prose object,
+.prose figure {
+  max-width: 100%;
+  height: auto;
+}
+
+/* code/pre inside the article scrolls by itself instead of pushing the page */
+.prose pre,
+.prose .wp-block-code,
+.prose .wp-block-preformatted {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* a table written directly in the editor (not wrapped by the theme) becomes its own scroller */
+.prose > table,
+.prose > .wp-block-table > table {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.prose .table-wrap,
+.table-wrap {
+  max-width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* ---------- grid / flex children default to min-width:auto ----------
+   One long word (or an <input>, a <pre>, a URL) inside a 1fr track makes the whole grid wider than
+   the viewport. min-width:0 lets the track shrink and the content wrap/scroll inside it. */
+:where(
+  .grid--2, .grid--3, .grid--4, .grid--auto,
+  .form-grid, .checklist--cols, .facts, .stats,
+  .footer__grid, .footer__list--2col,
+  .cta-band, .feature-case, .blog-featured, .article-grid, .type-layout, .contact-grid, .contact-cards,
+  .products, .posts, .mega__panel, .mega__cols
+) > * {
+  min-width: 0;
+}
+
+/* ---------- off-canvas panels ----------
+   The drawer/search/lightbox panels are translated outside the viewport while closed; clipping
+   them on their fixed wrapper keeps Safari from adding a horizontal scroll area. */
+.drawer,
+.modal,
+.lightbox {
+  overflow: hidden;
+}
+
+.drawer__panel {
+  max-width: 100%;
+}
+
+.modal__box,
+.lightbox__box {
+  max-width: calc(100vw - 2rem);
+}
+
+/* compact mega menu is centred under its own button: never wider than the screen minus the gutters */
+.mega--menu {
+  width: min(330px, calc(100vw - 2rem));
+  max-width: calc(100vw - 2rem);
+}
+
+/* ---------- third-party embeds (چت، نقشه، ویدیو) ---------- */
+iframe[src*="youtube"],
+iframe[src*="aparat"],
+iframe[src*="google.com/maps"],
+iframe[src*="neshan"],
+.prose iframe {
+  width: 100%;
+  border: 0;
+}
+
+/* ---------- defensive: the sticky header and the admin bar ---------- */
+.site-header,
+.topbar {
+  max-width: 100%;
+}
+
+@media (max-width: 782px) {
+  /* the WP admin bar is 46px tall on phones: it never needs to be wider than the screen */
+  #wpadminbar {
+    max-width: 100%;
+  }
+}
